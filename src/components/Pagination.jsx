@@ -1,33 +1,46 @@
-import './styles/pagination.css'; 
+import './styles/pagination.css';
 
-function Pagination() {
+function Pagination({ totalPaginas, paginaActual, setPaginaActual }) {
     return (
         <nav className="mt-4">
             <ul className="pagination justify-content-center">
 
-                <li className="page-item disabled">
-                    <button className="page-link">Previous</button>
+                <li className={`page-item ${paginaActual === 1 ? "disabled" : ""}`}>
+                    <button
+                        className="page-link"
+                        onClick={() => setPaginaActual(paginaActual - 1)}
+                    >
+                        Previous
+                    </button>
                 </li>
 
-                <li className="page-item active">
-                    <button className="page-link">1</button>
-                </li>
+                {[...Array(totalPaginas)].map((_, index) => (
+                    <li
+                        key={index}
+                        className={`page-item ${paginaActual === index + 1 ? "active" : ""}`}
+                    >
+                        <button
+                            className="page-link"
+                            onClick={() => setPaginaActual(index + 1)}
+                        >
+                            {index + 1}
+                        </button>
+                    </li>
+                ))}
 
-                <li className="page-item">
-                    <button className="page-link">2</button>
-                </li>
-
-                <li className="page-item">
-                    <button className="page-link">3</button>
-                </li>
-
-                <li className="page-item">
-                    <button className="page-link">Next</button>
+                <li className={`page-item ${paginaActual === totalPaginas ? "disabled" : ""}`}>
+                    <button
+                        className="page-link"
+                        onClick={() => setPaginaActual(paginaActual + 1)}
+                    >
+                        Next
+                    </button>
                 </li>
 
             </ul>
         </nav>
     );
 }
+
 
 export default Pagination;
