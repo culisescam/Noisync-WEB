@@ -88,11 +88,12 @@
 			<version>1.5.5.Final</version>
 		</dependency>
 
-		<!-- Oracle -->
+		<!-- Oracle JDBC + companion jars (wallet/tcps) -->
 		<dependency>
 			<groupId>com.oracle.database.jdbc</groupId>
-			<artifactId>ojdbc11</artifactId>
+			<artifactId>ojdbc11-production</artifactId>
 			<version>23.3.0.23.09</version>
+			<type>pom</type>
 		</dependency>
 
 		<!-- Devtools -->
@@ -109,6 +110,7 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+
 
 	</dependencies>
 
