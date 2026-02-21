@@ -32,6 +32,7 @@ function App() {
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/search-public-songs" element={<SongSeachPublic />} />
           <Route path="/vista-cancion-publica/:id" element={<VistaPublicaCancion />} />
+          <Route path="/home-leader" element={<HomeLeader />} />
 
 
         </Route>
