@@ -1,7 +1,6 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import MainLayout from "./layouts/MainLayout";
-
 import HomeLeader from "./features/admin/pages/homeLeader";
 
 import Login from "./features/auth/pages/login";
@@ -13,32 +12,25 @@ import SongSeachPublic from "./features/songs/pages/searchPublicSongs";
 import VistaPublicaCancion from "./features/songs/pages/vistaPublicaCancion";
 
 import Home from "./pages/home";
-
-
-
+import TestBackend from "./pages/TestBackend";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-
-        {/* Layout principal */}
-        <Route element={<MainLayout />}>
-
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/change-password" element={<ChangePassword />} />
-          <Route path="/registro" element={<Registro />} />
-          <Route path="/forgot-password" element={<ForgotPassword />} />
-          <Route path="/search-public-songs" element={<SongSeachPublic />} />
-          <Route path="/vista-cancion-publica/:id" element={<VistaPublicaCancion />} />
-          <Route path="/home-leader" element={<HomeLeader />} />
-
-
-        </Route>
-
-      </Routes>
-    </BrowserRouter>
+      <BrowserRouter>
+        <Routes>
+          <Route element={<MainLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/change-password" element={<ChangePassword />} />
+            <Route path="/registro" element={<Registro />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/search-public-songs" element={<SongSeachPublic />} />
+            <Route path="/vista-cancion-publica/:id" element={<VistaPublicaCancion />} />
+            <Route path="/home-leader" element={<HomeLeader />} />
+            <Route path="/test-backend" element={<TestBackend />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
   );
 }
 
