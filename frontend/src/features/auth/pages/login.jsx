@@ -3,43 +3,14 @@ import { useNavigate, Link } from "react-router-dom";
 import AuthHeader from "../components/AuthHeader";
 import FormInput from "../components/FormInput";
 import "../components/styles/login.css";
-<<<<<<< Updated upstream
 
 import { loginRequest, saveSession } from "../../../api/authService";
-=======
 import useForm from "../../hooks/useForm";
-
->>>>>>> Stashed changes
 
 function Login() {
     const navigate = useNavigate();
+    const [errorMsg, setErrorMsg] = useState("");
 
-<<<<<<< Updated upstream
-    const [email, setEmail] = useState("");      // aquí guardamos "correo o usuario"
-    const [password, setPassword] = useState("");
-    const [errorMsg, setErrorMsg] = useState(""); // para mostrar error
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        setErrorMsg("");
-
-        try {
-            // backend espera: { identifier, password }
-            const data = await loginRequest(email, password);
-
-            saveSession(data);
-
-            // redirección por rol
-            if (data.role === "LEADER") navigate("/home-leader");
-            else navigate("/"); // o crea /home-musician si quieres
-        } catch (err) {
-            const backendMsg =
-                err?.response?.data?.message ||
-                err?.response?.data?.error ||
-                "Credenciales incorrectas";
-            setErrorMsg(backendMsg);
-        }
-=======
     const initialValues = {
         identifier: "",
         password: "",
@@ -69,14 +40,22 @@ function Login() {
         useForm(initialValues, validar);
 
     const onValidSubmit = async (vals) => {
-        console.log("Login válido:", vals);
+        setErrorMsg("");
 
-        // Aquí normalmente llamas tu API de login:
-        // const { token, role } = await api.login(vals);
+        try {
+            const data = await loginRequest(vals.identifier, vals.password);
 
-        // Ejemplo de navegación (ajústalo a tu flujo real):
-        // navigate("/home-leader", { replace: true });
->>>>>>> Stashed changes
+            saveSession(data);
+
+            if (data.role === "LEADER") navigate("/home-leader");
+            else navigate("/");
+        } catch (err) {
+            const backendMsg =
+                err?.response?.data?.message ||
+                err?.response?.data?.error ||
+                "Credenciales incorrectas";
+            setErrorMsg(backendMsg);
+        }
     };
 
     return (
@@ -85,17 +64,11 @@ function Login() {
 
             <div className="login-card">
                 <h2 className="fw-bold text-center mb-2">Iniciar sesión</h2>
-<<<<<<< Updated upstream
                 <p className="text-muted text-center mb-4">
                     Accede a tu cuenta de Noisync
                 </p>
 
-                <form onSubmit={handleSubmit}>
-=======
-                <p className="text-muted text-center mb-4">Accede a tu cuenta de Noisync</p>
-
                 <form onSubmit={handleSubmit(onValidSubmit)} noValidate>
->>>>>>> Stashed changes
                     <FormInput
                         name="identifier"
                         type="text"
@@ -120,14 +93,16 @@ function Login() {
                         forceValidate={submitIntentado}
                     />
 
-                    {/* error visible */}
                     {errorMsg && (
                         <div className="alert alert-danger py-2 mt-2 mb-0">
                             {errorMsg}
                         </div>
                     )}
 
-                    <button type="submit" className="btn btn-dark w-100 custom-btn mt-3">
+                    <button
+                        type="submit"
+                        className="btn btn-dark w-100 custom-btn mt-3"
+                    >
                         Entrar
                     </button>
                 </form>
