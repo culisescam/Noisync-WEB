@@ -1,7 +1,6 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import "./styles/sidebarLeader.css";
-
-function SidebarLeader() {
+import "../../admin/components/styles/sidebarLeader.css";
+function SidebarUser() {
 
     const navigate = useNavigate();
 
@@ -17,19 +16,11 @@ function SidebarLeader() {
             style={{ width: "240px" }}>
             <ul className="nav nav-pills flex-column gap-2">
 
-                <li className="nav-item">
-                    <NavLink
-                        to="/record-song"
-                        className="nav-link d-flex align-items-center gap-3"
-                    >
-                        <i className="bi-music-note-list"></i>
-                        <span>Registrar Cancion</span>
-                    </NavLink>
-                </li>
+
 
                 <li className="nav-item">
                     <NavLink
-                        to="/musician-management"
+                        to="/musician-user"
                         className="nav-link d-flex align-items-center gap-3"
                     >
                         <i className="bi bi-person fs-5"></i>
@@ -39,7 +30,7 @@ function SidebarLeader() {
 
                 <li className="nav-item">
                     <NavLink
-                        to="/instruments-management"
+                        to="/instruments-user"
                         className="nav-link d-flex align-items-center gap-3"
                     >
                         <i className="bi bi-tag fs-5"></i>
@@ -49,7 +40,7 @@ function SidebarLeader() {
 
                 <li className="nav-item">
                     <NavLink
-                        to="/profile"
+                        to="/profile-user"
                         className="nav-link d-flex align-items-center gap-3"
                     >
                         <i className="bi bi-person-circle fs-5"></i>
@@ -59,7 +50,7 @@ function SidebarLeader() {
 
                 <li className="nav-item">
                     <NavLink
-                        to="/band-profile"
+                        to="/band-profile-user"
                         className="nav-link d-flex align-items-center gap-3"
                     >
                         <i className="bi bi-people fs-5"></i>
@@ -81,4 +72,4 @@ function SidebarLeader() {
     );
 }
 
-export default SidebarLeader;
+export default SidebarUser;

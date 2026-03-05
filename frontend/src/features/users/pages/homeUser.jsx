@@ -1,13 +1,10 @@
-import { useState, useEffect } from "react";
-import Pagination from "../../shared/components/Pagination";
-import SongCard from "../../songs/components/SongCard";
+import { useEffect, useState } from "react";
 import SearchBar from "../../shared/components/SearchBar";
-import "../components/styles/homeLeader.css";
 import { Link } from "react-router-dom";
+import SongCard from "../../songs/components/SongCard";
+import Pagination from "../../shared/components/Pagination";
 
-
-function HomeLeader() {
-
+function HomeUser() {
     const [canciones, setCanciones] = useState([]);
     const [paginaActual, setPaginaActual] = useState(1);
     const cancionesPorPagina = 8;
@@ -39,7 +36,6 @@ function HomeLeader() {
         indicePrimeraCancion,
         indiceUltimaCancion
     );
-
     return (
         <>
             <h3 className="mb-0">Canciones</h3>
@@ -65,13 +61,6 @@ function HomeLeader() {
 
                 </div>
 
-                <Link
-                    to="/registro"
-                    className="btn btn-dark px-4 py-2 align-self-start align-self-lg-auto"
-                    style={{ whiteSpace: "nowrap" }}
-                >
-                    + Registrar canción
-                </Link>
 
             </div>
 
@@ -95,5 +84,4 @@ function HomeLeader() {
         </>
     );
 }
-
-export default HomeLeader;
+export default HomeUser;

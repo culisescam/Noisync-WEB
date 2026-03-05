@@ -4,7 +4,9 @@ import AuthHeader from "../components/AuthHeader";
 import FormInput from "../components/FormInput";
 import "../components/styles/login.css";
 
-import { loginRequest, saveSession } from "../../../api/authService";
+// BACKEND (se usará después)
+// import { loginRequest, saveSession } from "../../../api/authService";
+
 import useForm from "../../hooks/useForm";
 
 function Login() {
@@ -43,17 +45,44 @@ function Login() {
         setErrorMsg("");
 
         try {
+
+            // =========================
+            // LOGIN SIMULADO (TEMPORAL)
+            // =========================
+
+            const fakeUser = {
+                id: 1,
+                name: "Davor",
+                role: vals.identifier === "leader" ? "LEADER" : "USER"
+            };
+
+            localStorage.setItem("user", JSON.stringify(fakeUser));
+
+            if (fakeUser.role === "LEADER") {
+                navigate("/home-leader");
+            } else {
+                navigate("/home-user");
+            }
+
+            // =========================
+            // LOGIN REAL (BACKEND)
+            // =========================
+            /*
             const data = await loginRequest(vals.identifier, vals.password);
 
             saveSession(data);
 
             if (data.role === "LEADER") navigate("/home-leader");
-            else navigate("/");
+            else navigate("/home-user");
+            */
+
         } catch (err) {
+
             const backendMsg =
                 err?.response?.data?.message ||
                 err?.response?.data?.error ||
                 "Credenciales incorrectas";
+
             setErrorMsg(backendMsg);
         }
     };
@@ -63,12 +92,17 @@ function Login() {
             <AuthHeader />
 
             <div className="login-card">
-                <h2 className="fw-bold text-center mb-2">Iniciar sesión</h2>
+
+                <h2 className="fw-bold text-center mb-2">
+                    Iniciar sesión
+                </h2>
+
                 <p className="text-muted text-center mb-4">
                     Accede a tu cuenta de Noisync
                 </p>
 
                 <form onSubmit={handleSubmit(onValidSubmit)} noValidate>
+
                     <FormInput
                         name="identifier"
                         type="text"
@@ -105,18 +139,24 @@ function Login() {
                     >
                         Entrar
                     </button>
+
                 </form>
 
                 <div className="text-center mt-4 small">
+
                     <Link to="/forgot-password" className="link-text">
                         ¿Olvidaste tu contraseña?
                     </Link>
+
                     <br />
+
                     ¿No tienes cuenta?{" "}
                     <Link to="/registro" className="link-text">
                         Registrarse
                     </Link>
+
                 </div>
+
             </div>
         </div>
     );

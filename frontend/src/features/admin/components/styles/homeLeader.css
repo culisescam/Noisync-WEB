@@ -1,0 +1,33 @@
+.custom-segment {
+    display: inline-flex;
+    align-items: center;
+    background: #f8f9fa;
+    padding: 6px;
+    border-radius: 16px;
+    border: 1px solid #e5e7eb; 
+    gap: 6px;
+}
+
+.custom-segment input {
+    display: none;
+}
+
+.custom-segment label {
+    padding: 8px 22px;
+    border-radius: 12px;
+    cursor: pointer;
+    font-weight: 500;
+    font-size: 15px;
+    color: #444;
+    transition: all 0.2s ease;
+}
+
+.custom-segment label:hover {
+    background: #f1f3f5;
+}
+
+.custom-segment input:checked + label {
+    background: #ffffff; 
+    border: 1px solid #e5e7eb;
+    color: #111;
+}

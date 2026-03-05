@@ -1,14 +1,13 @@
 import { Outlet } from "react-router-dom";
 import NavbarLeader from "../features/admin/components/navbarLeade";
-import SidebarLeader from "../features/admin/components/sidebarLeader";
+import SidebarUser from "../features/users/components/SideBarUser";
 
-function LeaderLayout() {
+function UserLayout() {
     return (
         <div className="d-flex flex-column vh-100">
 
             {/* Navbar */}
-            <NavbarLeader role="leader" />
-
+            <NavbarLeader role="user" />
             {/* Contenedor principal */}
             <div className="d-flex flex-grow-1 overflow-hidden">
 
@@ -17,7 +16,7 @@ function LeaderLayout() {
                     className="border-end bg-white d-none d-lg-block"
                     style={{ width: "240px" }}
                 >
-                    <SidebarLeader />
+                    <SidebarUser />
                 </div>
 
                 {/* CONTENIDO SCROLLABLE */}
@@ -31,4 +30,4 @@ function LeaderLayout() {
     );
 }
 
-export default LeaderLayout;
+export default UserLayout;

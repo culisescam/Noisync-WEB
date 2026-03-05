@@ -2,7 +2,10 @@ import "../../shared/styles/navbar.css";
 import logo from "../../../assets/logo.png";
 import { Link } from "react-router-dom";
 
-function NavbarLeader() {
+
+function NavbarLeader({ role }) {
+    const homeRoute = role === "leader" ? "/home-leader" : "/home-user";
+
     return (
         <header>
             <nav className="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
@@ -10,7 +13,7 @@ function NavbarLeader() {
 
                     {/* Logo */}
                     <Link
-                        to="/dashboard"
+                        to={homeRoute}
                         className="navbar-brand d-flex align-items-center gap-2 fw-semibold"
                     >
                         <img
