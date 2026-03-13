@@ -3,6 +3,8 @@ import IntrumentsTable from "../components/InstrumentsTable";
 import AddInstrumentCategoryCard from "../components/addInstrumentCategoryCard";
 import { getInstruments, deleteInstrument } from "../../../api/instrumentService";
 
+import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+
 function Instruments() {
     const [showAdd, setShowAdd] = useState(false);
     const [instruments, setInstruments] = useState([]);
@@ -26,10 +28,10 @@ function Instruments() {
                 const confirm = window.confirm("Hay músicos usando este rol, ¿deseas eliminarlo de sus perfiles?");
                 if (confirm) {
                     // forzar eliminación — necesitarías un endpoint con force=true, por ahora alerta
-                    alert("Funcionalidad de reasignación pendiente.");
+                    toastInfo("Funcionalidad de reasignación pendiente.");
                 }
             } else {
-                alert("No se pudo eliminar el instrumento.");
+                toastError("No se pudo eliminar el instrumento.");
             }
         }
     };

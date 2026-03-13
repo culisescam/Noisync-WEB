@@ -3,6 +3,7 @@ import InviteMusicianCard from "../components/inviteMusicianCard";
 import MusiciansTable from "../components/MusiciansTable";
 import EditMusicianCard from "../components/editMusicianCard";
 import { getMusicians, removeMusician, resetMusicianPassword } from "../../../api/musicianService";
+import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
 
 function MusicianManagement() {
     const [editingMusician, setEditingMusician] = useState(null);
@@ -30,26 +31,26 @@ function MusicianManagement() {
     const handleEdit = (musician) => setEditingMusician(musician);
 
     const handleDelete = async (userId) => {
-        if (!window.confirm("¿Seguro que deseas eliminar este músico? Se revocará su acceso inmediato.")) return;
+        if (!confirmDelete("¿Seguro que deseas eliminar este músico? Se revocará su acceso inmediato.")) return;
         try {
             await removeMusician(userId);
-            alert("Músico eliminado y acceso revocado");
+            toastSuccess("Músico eliminado y acceso revocado");
             load();
         } catch (e) {
             console.error(e);
-            alert("No se pudo eliminar el músico");
+            toastError("No se pudo eliminar el músico");
         }
     };
 
     const handleResetPassword = async (musician) => {
-        if (!window.confirm(`¿Restablecer la contraseña de ${musician.nombreCompleto}? Se le enviará una nueva contraseña a su correo.`)) return;
+        if (!confirmAction(`¿Restablecer la contraseña de ${musician.nombreCompleto}? Se le enviará una nueva contraseña a su correo.`)) return;
         try {
             await resetMusicianPassword(musician.userId);
-            alert("Contraseña restablecida y enviada al músico");
+            toastSuccess("Contraseña restablecida y enviada al músico");
             load();
         } catch (e) {
             console.error(e);
-            alert("No se pudo restablecer la contraseña. Intenta más tarde.");
+            toastError("No se pudo restablecer la contraseña. Intenta más tarde.");
         }
     };
 

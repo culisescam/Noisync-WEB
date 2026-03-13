@@ -5,6 +5,7 @@ import FormInput from "../components/FormInput";
 import "../components/styles/changePassword.css";
 import useForm from "../../hooks/useForm";
 import { api } from "../../../api/api";
+import { toastError, toastSuccess } from "../../../api/alerts";
 
 
 
@@ -54,7 +55,7 @@ function ChangePassword() {
                 confirmPassword: vals.confirmPassword
             });
 
-            alert("Contraseña actualizada correctamente");
+            toastSuccess("Contraseña actualizada correctamente");
 
             localStorage.removeItem("accessToken");
 
@@ -65,9 +66,9 @@ function ChangePassword() {
             console.error(error);
 
             if (error.response?.status === 400) {
-                alert("La contraseña actual es incorrecta o las nuevas no coinciden");
+                toastError("La contraseña actual es incorrecta o las nuevas no coinciden");
             } else {
-                alert("No se pudo actualizar la contraseña");
+                toastError("No se pudo actualizar la contraseña");
             }
 
         }

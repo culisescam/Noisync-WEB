@@ -4,6 +4,8 @@ import FormInput from "../components/FormInput";
 import "../components/styles/changePassword.css";
 import useForm from "../../hooks/useForm";
 import { api } from "../../../api/api";
+import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+
 
 function ResetPassword() {
 
@@ -52,7 +54,7 @@ function ResetPassword() {
                 confirmPassword: vals.confirmPassword
             });
 
-            alert("Contraseña actualizada correctamente");
+            toastSuccess("Contraseña actualizada correctamente");
 
             navigate("/login", { replace: true });
 
@@ -61,9 +63,9 @@ function ResetPassword() {
             console.error(error);
 
             if (error.response?.status === 400) {
-                alert("El token es inválido o expiró");
+                toastError("El token es inválido o expiró");
             } else {
-                alert("No se pudo actualizar la contraseña");
+                toastError("No se pudo actualizar la contraseña");
             }
 
         }

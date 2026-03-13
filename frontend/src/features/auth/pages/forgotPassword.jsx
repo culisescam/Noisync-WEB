@@ -5,6 +5,8 @@ import FormInput from "../components/FormInput";
 import "../components/styles/changePassword.css";
 import useForm from "../../hooks/useForm";
 import { api } from "../../../api/api";
+import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+
 
 
 
@@ -41,7 +43,7 @@ function ForgotPassword() {
                 email: vals.email
             });
 
-            alert("Se enviaron instrucciones a tu correo");
+            toastInfo("Se enviaron instrucciones a tu correo");
             navigate("/login", { replace: true });
 
         } catch (error) {
@@ -50,7 +52,7 @@ function ForgotPassword() {
                 error?.response?.data?.message ||
                 "No se pudo enviar la recuperación";
 
-            alert(msg);
+            toastError(msg);
         }
     };
 

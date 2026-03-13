@@ -5,6 +5,8 @@ import FormInput from "../components/FormInput";
 import "../components/styles/registro.css";
 import useForm from "../../hooks/useForm";
 import { registerRequest, saveSession } from "../../../api/authService.js";
+import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+
 
 
 function Registro() {
@@ -80,7 +82,7 @@ function Registro() {
 
         } catch (err) {
             console.error(err);
-            alert(err?.response?.data?.message || "Error al registrar");
+            toastError(err?.response?.data?.message || "Error al registrar");
         }
     };
 

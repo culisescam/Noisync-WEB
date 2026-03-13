@@ -1,5 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { updateMusicianInstruments } from "../../../api/musicianService.js";
+import { getInstruments } from "../../../api/instrumentService.js";
+
 
 function EditMusicianCard({ musician, onBack, onSave }) {
     const [availableInstruments, setAvailableInstruments] = useState([]);

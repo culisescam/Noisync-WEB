@@ -1,21 +1,25 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "./styles/sidebarLeader.css";
 import { clearSession } from "../../../api/authService";
+import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+
 
 function SidebarLeader() {
 
     const navigate = useNavigate();
 
-    const handleLogout = () => {
+    const handleLogout = async () => {
+        const result = await confirmAction(
+            "¿Cerrar sesión?",
+            "Tu sesión actual será terminada",
+            "Sí, salir"
+        );
 
-        const confirmLogout = window.confirm("¿Seguro que quieres cerrar sesión?");
-
-        if (confirmLogout) {
-            clearSession(); // elimina todo del localStorage
+        if (result.isConfirmed) {
+            clearSession();
             navigate("/login");
         }
     };
-
     return (
         <aside className="d-flex flex-column h-100 p-3" style={{ width: "240px" }}>
             <ul className="nav nav-pills flex-column gap-2">

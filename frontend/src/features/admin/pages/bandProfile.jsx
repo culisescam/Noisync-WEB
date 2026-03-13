@@ -2,12 +2,12 @@ import { useEffect, useState } from "react";
 import BandProfileCard from "../components/BandProfileCard";
 import EditBandForm from "../components/EditBandForm";
 import { api } from "../../../api/api.js";
+import { toastError } from "../../../api/alerts.js";
 
 function BandProfile() {
 
     const [editing, setEditing] = useState(false);
     const [bandData, setBandData] = useState(null);
-
 
     useEffect(() => {
         loadBand();
@@ -44,6 +44,7 @@ function BandProfile() {
 
         } catch (err) {
             console.error("Error cargando banda", err);
+            toastError("No se pudo cargar el perfil de la banda");
         }
     };
 

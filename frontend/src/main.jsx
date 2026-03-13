@@ -5,9 +5,13 @@ import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
 import './app.css';
+import { Toaster } from 'sonner';
+
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <Toaster position="top-right" richColors />
+
     <App />
   </StrictMode>,
 )
