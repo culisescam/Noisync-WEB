@@ -81,6 +81,21 @@ public class BandProfileService {
                 rs.getString("url")
         ), id, bandId);
     }
+        @Transactional
+        public void replaceSocials(Long bandId, List<BandSocialRequest> socials) {
+
+            jdbc.update("""
+                DELETE FROM band_social
+                WHERE band_id = ?
+            """, bandId);
+
+            for (BandSocialRequest s : socials) {
+                jdbc.update("""
+                    INSERT INTO band_social (band_id, plataforma, url)
+                    VALUES (?, ?, ?)
+                """, bandId, s.plataforma(), s.url());
+            }
+        }
 
     @Transactional
     public void deleteSocial(Long bandId, Long bandSocialId) {

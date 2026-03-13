@@ -54,6 +54,23 @@ public class BandProfileController {
         if (!isLeader(auth)) throw new IllegalArgumentException("Solo un lider puede editar redes");
         return service.addSocial(bandId(auth), req);
     }
+    @PutMapping("/socials")
+    public Map<String, Object> replaceSocials(
+        @RequestBody List<BandSocialRequest> socials,
+        Authentication auth
+    ) {
+
+    if (!isLeader(auth)) {
+        throw new IllegalArgumentException("Solo un lider puede editar redes");
+    }
+
+    service.replaceSocials(bandId(auth), socials);
+
+    return Map.of(
+        "ok", true,
+        "message", "Redes sociales actualizadas"
+    );
+}
 
     // DELETE /api/band/socials/{id} (solo leader)
     @DeleteMapping("/socials/{id}")

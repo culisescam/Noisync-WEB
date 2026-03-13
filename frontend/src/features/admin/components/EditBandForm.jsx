@@ -1,18 +1,18 @@
 import { useState } from "react";
+import { api } from "../../../api/api.js";
+
 
 function EditBandForm({ bandData, onBack }) {
 
     const [band, setBand] = useState({
-        name: "",
-        description: "",
-        genre: "Rock Alternativo",
-        instagram: "",
-        facebook: "",
-        twitter: "",
-        youtube: "",
-        website: ""
+        name: bandData?.name || "",
+        description: bandData?.description || "",
+        instagram: bandData?.instagram || "",
+        facebook: bandData?.facebook || "",
+        twitter: bandData?.twitter || "",
+        youtube: bandData?.youtube || "",
+        website: bandData?.website || ""
     });
-
     const handleChange = (e) => {
         setBand({
             ...band,
@@ -20,14 +20,34 @@ function EditBandForm({ bandData, onBack }) {
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Band updated:", band);
+        try {
 
-        // aquí irá el fetch al backend
+            //console.log("Band state antes de enviar:", band);
+            await api.put("/api/band", {
+                nombre: band.name,
+                descripcion: band.description
+            });
 
-        onBack(); // regresar a la vista
+            const socials = [
+                { plataforma: "instagram", url: band.instagram },
+                { plataforma: "facebook", url: band.facebook },
+                { plataforma: "twitter", url: band.twitter },
+                { plataforma: "youtube", url: band.youtube },
+                { plataforma: "website", url: band.website }
+            ].filter(s => s.url && s.url.trim() !== "");
+
+            //console.log("Socials enviadas:", socials);
+
+            await api.put("/api/band/socials", socials);
+
+            onBack();
+
+        } catch (err) {
+            console.error("Error actualizando banda", err);
+        }
     };
 
     return (
@@ -89,31 +109,6 @@ function EditBandForm({ bandData, onBack }) {
 
                         </div>
 
-
-
-                        <div className="mb-2">
-
-                            <label className="form-label fw-medium">
-                                Género musical
-                            </label>
-
-                            <select
-                                className="form-select"
-                                name="genre"
-                                value={band.genre}
-                                onChange={handleChange}
-                            >
-                                <option>Rock</option>
-                                <option>Rock Alternativo</option>
-                                <option>Metal</option>
-                                <option>Pop</option>
-                                <option>Indie</option>
-                                <option>Jazz</option>
-                                <option>Hip Hop</option>
-                                <option>Electrónica</option>
-                            </select>
-
-                        </div>
 
                     </div>
 

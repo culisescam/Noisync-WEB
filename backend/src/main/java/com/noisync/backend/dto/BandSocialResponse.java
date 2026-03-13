@@ -5,4 +5,4 @@ public record BandSocialResponse(
         Long bandId,
         String plataforma,
         String url
-) {}
+) {} 

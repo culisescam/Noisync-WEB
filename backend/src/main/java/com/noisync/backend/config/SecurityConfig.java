@@ -49,8 +49,8 @@ public class SecurityConfig {
                         ).permitAll()
 
                         // ejemplo de RBAC (si tus endpoints de líder son estos)
-                        .requestMatchers("/api/band/**", "/api/invite/**").hasRole("LEADER")
-
+                        .requestMatchers("/api/band", "/api/band/**").hasRole("LEADER")           
+                        .requestMatchers("/api/invite/**").hasRole("LEADER")
                         .anyRequest().authenticated()
                 );
 
