@@ -135,4 +135,32 @@ public class PasswordResetService {
             );
         }
     }
+
+@Transactional
+public void leaderResetPassword(Long bandId, Long musicianId) {
+    // Validar que sea músico de la banda
+    AppUser musician = userRepo.findById(musicianId)
+            .orElseThrow(() -> new IllegalArgumentException("Músico no encontrado"));
+
+    if (!musician.getBandId().equals(bandId) || !musician.getRol().equals("MUSICIAN")) {
+        throw new IllegalArgumentException("Músico no pertenece a esta banda");
+    }
+
+    // Generar contraseña temporal
+    String tempPassword = "Tmp" + UUID.randomUUID().toString()
+            .replace("-", "").substring(0, 8) + "1A";
+
+    musician.setPasswordHash(encoder.encode(tempPassword));
+    musician.setPrimerLogin(1);
+    userRepo.save(musician);
+
+    // Enviar por correo
+    emailService.send(
+            musician.getCorreo(),
+            "Noisync - Tu contraseña fue restablecida",
+            "El líder de tu banda restableció tu contraseña.\n\n" +
+            "Tu nueva contraseña temporal es: " + tempPassword + "\n\n" +
+            "Al iniciar sesión deberás cambiarla."
+    );
+}
 }

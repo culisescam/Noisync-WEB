@@ -37,7 +37,12 @@ public class InstrumentService {
 
     @Transactional
     public InstrumentResponse create(Long bandId, Long userId, InstrumentRequest req) {
-
+// Límite de 30 categorías
+Integer total = jdbc.queryForObject(
+    "SELECT COUNT(*) FROM instrument WHERE band_id = ? AND activo = 1",
+    Integer.class, bandId
+);
+if (total != null && total >= 30) throw new IllegalArgumentException("Límite de 30 categorías alcanzado");
         // nombre unico por banda (ya lo tienes como uq)
         Integer count = jdbc.queryForObject("""
             SELECT COUNT(*) FROM instrument
@@ -85,6 +90,14 @@ public class InstrumentService {
     // soft delete
     @Transactional
     public void delete(Long bandId, Long instrumentId) {
+
+
+        // Verificar si hay músicos usando este instrumento
+Integer enUso = jdbc.queryForObject(
+    "SELECT COUNT(*) FROM musician_instrument WHERE instrument_id = ?",
+    Integer.class, instrumentId
+);
+if (enUso != null && enUso > 0) throw new IllegalArgumentException("EN_USO");
 
         // primero elimina relaciones
         jdbc.update("""

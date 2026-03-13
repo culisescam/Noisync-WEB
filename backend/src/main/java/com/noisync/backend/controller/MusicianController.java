@@ -6,6 +6,7 @@ import com.noisync.backend.service.MusicianInstrumentService;
 import com.noisync.backend.service.MusicianService;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import com.noisync.backend.service.PasswordResetService; 
 
 import java.util.List;
 import java.util.Map;
@@ -16,10 +17,13 @@ public class MusicianController {
     private final MusicianInstrumentService service;
     private final MusicianService musicianService;
 
-    public MusicianController(MusicianInstrumentService service, MusicianService musicianService) {
-        this.service = service;
-        this.musicianService = musicianService;
-    }
+private final PasswordResetService passwordResetService;
+
+public MusicianController(MusicianInstrumentService service, MusicianService musicianService, PasswordResetService passwordResetService) {
+    this.service = service;
+    this.musicianService = musicianService;
+    this.passwordResetService = passwordResetService;
+}
     private Long bandId(Authentication auth) {
         @SuppressWarnings("unchecked")
         Map<String, Object> details = (Map<String, Object>) auth.getDetails();
@@ -35,11 +39,10 @@ public class MusicianController {
     }
 
     // solo leader
-    @GetMapping
-    public List<MusicianResponse> list(Authentication auth) {
-        if (!isLeader(auth)) throw new IllegalArgumentException("Solo un lider puede ver la lista de musicos");
-        return service.listMusicians(bandId(auth));
-    }
+@GetMapping
+public List<MusicianResponse> list(Authentication auth) {
+    return service.listMusicians(bandId(auth));
+}
 
     // leader o el mismo musico
     @GetMapping("/{musicianId}/instruments")
@@ -48,6 +51,15 @@ public class MusicianController {
         if (!allowed) throw new IllegalArgumentException("No autorizado");
         return service.listMusicianInstruments(bandId(auth), musicianId);
     }
+    @PutMapping("/{musicianId}/instruments")
+public Map<String, Object> updateInstruments(
+        @PathVariable Long musicianId,
+        @RequestBody List<String> instrumentos,
+        Authentication auth) {
+    if (!isLeader(auth)) throw new IllegalArgumentException("Solo un lider puede editar instrumentos");
+    service.updateInstruments(bandId(auth), musicianId, instrumentos);
+    return Map.of("ok", true, "message", "Instrumentos actualizados");
+}
 
     // solo leader
     @PostMapping("/{musicianId}/instruments/{instrumentId}")
@@ -80,4 +92,10 @@ public class MusicianController {
         musicianService.activateMusician(bandId(auth), musicianId, forcePasswordChange);
         return Map.of("ok", true, "message", "Musico activado");
     }
+    @PostMapping("/{musicianId}/reset-password")
+public Map<String, Object> resetPassword(@PathVariable Long musicianId, Authentication auth) {
+    if (!isLeader(auth)) throw new IllegalArgumentException("Solo un lider puede restablecer contraseñas");
+    passwordResetService.leaderResetPassword(bandId(auth), musicianId);
+    return Map.of("ok", true, "message", "Contraseña restablecida y enviada al músico");
+}
 }

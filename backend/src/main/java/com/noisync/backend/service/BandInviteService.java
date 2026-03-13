@@ -88,10 +88,10 @@ public class BandInviteService {
         String passwordHash = encoder.encode(tempPassword);
 
         // ===== CREAR PERSON =====
-        jdbc.update("""
-            INSERT INTO person (nombre_completo, telefono, correo, correo_verificado)
-            VALUES (?, ?, ?, 0)
-        """, req.nombreCompleto(), req.telefono(), req.correo());
+jdbc.update("""
+    INSERT INTO person (nombre_completo, telefono, correo, correo_verificado)
+    VALUES (?, ?, ?, 0)
+""", req.nombreCompleto(), null, req.correo());
 
         Long personId = jdbc.queryForObject(
                 "SELECT MAX(person_id) FROM person",
@@ -125,15 +125,36 @@ public class BandInviteService {
                 "SELECT MAX(user_id) FROM app_user",
                 Long.class
         );
+if (req.instrumentos() != null && !req.instrumentos().isEmpty()) {
+    for (String nombreInstrumento : req.instrumentos()) {
+        Long instrumentId = null;
+        try {
+            instrumentId = jdbc.queryForObject(
+                "SELECT instrument_id FROM instrument WHERE LOWER(nombre) = LOWER(?) AND band_id = ?",
+                Long.class,
+                nombreInstrumento, bandId
+            );
+            System.out.println("Instrumento encontrado: " + nombreInstrumento + " -> ID: " + instrumentId);
+        } catch (Exception e) {
+            System.out.println("Instrumento NO encontrado: " + nombreInstrumento + " error: " + e.getMessage());
+        }
 
-        return new InviteMusicianResponse(
-                true,
-                userId,
-                req.correo(),
-                username,
-                tempPassword,
-                null
-        );
+        if (instrumentId != null) {
+            jdbc.update(
+                "INSERT INTO musician_instrument (user_id, instrument_id) VALUES (?, ?)",
+                userId, instrumentId
+            );
+        }
+    }
+}
+    return new InviteMusicianResponse(
+        true,
+        userId,
+        req.correo(),
+        username,
+        tempPassword, 
+        null
+            );
     }
 
 

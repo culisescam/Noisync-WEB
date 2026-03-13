@@ -1,22 +1,19 @@
-function InstrumentsRow({ instrument, isLeader }) {
+function InstrumentsRow({ instrument, isLeader, onDelete }) {
     return (
-        <>
-            <tr>
-
-                <td>{instrument.name}
-                    <p className="text-secondary mb-0">{instrument.cant} instrumentos</p>
+        <tr>
+            <td>{instrument.nombre}</td>
+            {isLeader && (
+                <td>
+                    <button
+                        className="btn btn-sm btn-outline-danger"
+                        onClick={() => onDelete(instrument.instrumentId)}
+                    >
+                        Eliminar
+                    </button>
                 </td>
-
-                {isLeader && (
-                    <td>
-                        <button className="btn btn-sm btn-outline-danger">
-                            ELIMINAR                    </button>
-
-                    </td>
-                )}
-
-            </tr>
-        </>
+            )}
+        </tr>
     );
 }
+
 export default InstrumentsRow;

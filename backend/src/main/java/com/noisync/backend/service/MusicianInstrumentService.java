@@ -18,15 +18,24 @@ public class MusicianInstrumentService {
         this.jdbc = jdbc;
     }
 
-private final RowMapper<MusicianResponse> musicianMapper = (rs, rn) -> new MusicianResponse(
-        rs.getLong("user_id"),
-        rs.getLong("band_id"),
-        rs.getString("nombre_completo"),
-        rs.getString("correo"),
-        rs.getString("username"),
-        rs.getString("estatus"),
-        rs.getString("instrumento")
-);
+private final RowMapper<MusicianResponse> musicianMapper = (rs, rn) -> {
+
+    String instrumentosStr = rs.getString("instrumentos");
+
+    List<String> instrumentos = instrumentosStr == null
+            ? List.of()
+            : List.of(instrumentosStr.split(", "));
+
+    return new MusicianResponse(
+            rs.getLong("user_id"),
+            rs.getLong("band_id"),
+            rs.getString("nombre_completo"),
+            rs.getString("correo"),
+            rs.getString("username"),
+            rs.getString("estatus"),
+            instrumentos
+    );
+};
 
     private final RowMapper<InstrumentResponse> instrumentMapper = (rs, rn) -> new InstrumentResponse(
             rs.getLong("instrument_id"),
@@ -38,20 +47,14 @@ private final RowMapper<MusicianResponse> musicianMapper = (rs, rn) -> new Music
 public List<MusicianResponse> listMusicians(Long bandId) {
     return jdbc.query("""
         SELECT 
-            u.user_id,
-            u.band_id,
-            p.nombre_completo,
-            p.correo,
-            u.username,
-            u.estatus,
-            i.nombre AS instrumento
+            u.user_id, u.band_id, p.nombre_completo, p.correo, u.username, u.estatus,
+            (SELECT LISTAGG(i2.nombre, ', ') WITHIN GROUP (ORDER BY i2.nombre)
+             FROM musician_instrument mi2
+             JOIN instrument i2 ON i2.instrument_id = mi2.instrument_id
+             WHERE mi2.user_id = u.user_id) AS instrumentos
         FROM app_user u
         JOIN person p ON p.person_id = u.person_id
-        LEFT JOIN musician_instrument mi ON mi.user_id = u.user_id
-        LEFT JOIN instrument i ON i.instrument_id = mi.instrument_id
-        WHERE u.band_id = ?
-          AND u.rol = 'MUSICIAN'
-          AND u.activo = 1
+        WHERE u.band_id = ? AND u.rol = 'MUSICIAN' AND u.activo = 1
         ORDER BY p.nombre_completo ASC
     """, musicianMapper, bandId);
 }
@@ -116,4 +119,36 @@ public List<MusicianResponse> listMusicians(Long bandId) {
             WHERE user_id = ? AND instrument_id = ?
         """, musicianId, instrumentId);
     }
+
+    @Transactional
+public void updateInstruments(Long bandId, Long musicianId, List<String> instrumentos) {
+    // Validar que sea músico de la banda
+    Integer ok = jdbc.queryForObject("""
+        SELECT COUNT(*) FROM app_user
+        WHERE user_id = ? AND band_id = ? AND rol = 'MUSICIAN'
+    """, Integer.class, musicianId, bandId);
+
+    if (ok == null || ok == 0) throw new IllegalArgumentException("Musico no encontrado");
+
+    // Borrar instrumentos actuales
+    jdbc.update("DELETE FROM musician_instrument WHERE user_id = ?", musicianId);
+
+    // Insertar nuevos
+    for (String nombre : instrumentos) {
+        Long instrumentId = null;
+        try {
+            instrumentId = jdbc.queryForObject(
+                "SELECT instrument_id FROM instrument WHERE LOWER(nombre) = LOWER(?) AND band_id = ?",
+                Long.class, nombre, bandId
+            );
+        } catch (Exception ignored) {}
+
+        if (instrumentId != null) {
+            jdbc.update(
+                "INSERT INTO musician_instrument (user_id, instrument_id) VALUES (?, ?)",
+                musicianId, instrumentId
+            );
+        }
+    }
+}
 }

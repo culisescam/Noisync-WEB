@@ -5,8 +5,7 @@ import FormInput from "../components/FormInput";
 import "../components/styles/login.css";
 import { loginRequest, saveSession } from "../../../api/authService.js";
 
-// BACKEND (se usará después)
-// import { loginRequest, saveSession } from "../../../api/authService";
+
 
 import useForm from "../../hooks/useForm";
 
