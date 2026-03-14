@@ -1,4 +1,11 @@
-function ProfileCard({ name, email, role, band }) {
+import { Link } from "react-router-dom";
+
+
+function ProfileCard({ user, name, email, role, band }) {
+
+    const show = (value) => value && value.trim() !== "" ? value : "No configurado";
+
+
     return (
         <>
             <div className="container-fluid">
@@ -19,11 +26,11 @@ function ProfileCard({ name, email, role, band }) {
 
                             <div>
                                 <h5 className="mb-0 fw-bold">
-                                    {name}
+                                    {show(user)}
                                 </h5>
 
                                 <small className="text-muted">
-                                    {email}
+                                    {show(email)}
                                 </small>
                             </div>
 
@@ -40,7 +47,7 @@ function ProfileCard({ name, email, role, band }) {
                                 </small>
 
                                 <p className="mb-0 fw-medium">
-                                    {name}
+                                    {show(name)}
                                 </p>
 
                             </div>
@@ -52,7 +59,7 @@ function ProfileCard({ name, email, role, band }) {
                                 </small>
 
                                 <p className="mb-0 fw-medium">
-                                    {email}
+                                    {show(email)}
                                 </p>
 
                             </div>
@@ -64,7 +71,7 @@ function ProfileCard({ name, email, role, band }) {
                                 </small>
 
                                 <p className="mb-0 fw-medium">
-                                    {role}
+                                    {show(role)}
                                 </p>
 
                             </div>
@@ -76,7 +83,7 @@ function ProfileCard({ name, email, role, band }) {
                                 </small>
 
                                 <p className="mb-0 fw-medium">
-                                    {band}
+                                    {show(band)}
                                 </p>
 
                             </div>
@@ -110,15 +117,20 @@ function ProfileCard({ name, email, role, band }) {
                                     Contraseña
                                 </div>
 
-                                <small className="text-muted">
+                                {/*<small className="text-muted">
                                     Última actualización hace 3 meses
-                                </small>
+                                </small>*/}
 
                             </div>
 
-                            <button className="btn btn-outline-secondary btn-sm">
+                            <Link
+                                to="/forgot-password"
+                                className="btn btn-outline-secondary btn-sm"
+                                id='btnContra'
+                            >
                                 Cambiar contraseña
-                            </button>
+                            </Link>
+
 
                         </div>
 

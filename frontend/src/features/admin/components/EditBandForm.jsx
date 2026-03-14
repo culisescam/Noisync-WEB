@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { api } from "../../../api/api.js";
-import { toastError } from "../../../api/alerts.js";
+import { toastSuccess, toastError, confirmDelete } from "../../../api/alerts.js";
+import { useNavigate, Link } from "react-router-dom";
+
 
 
 function EditBandForm({ bandData, onBack }) {
@@ -49,6 +51,21 @@ function EditBandForm({ bandData, onBack }) {
         } catch (err) {
             console.error("Error actualizando banda", err);
             toastError("Error actualizando banda");
+        }
+    };
+
+    const navigate = useNavigate();
+
+    const handleDelete = async () => {
+        const result = await confirmDelete("Esta acción eliminará permanentemente la banda, músicos, canciones e instrumentos.");
+        if (!result.isConfirmed) return;
+        try {
+            await api.delete("/api/band");
+            toastSuccess("Banda eliminada correctamente");
+            navigate("/login");
+        } catch (e) {
+            console.error(e);
+            toastError("No se pudo eliminar la banda");
         }
     };
 
@@ -284,9 +301,13 @@ function EditBandForm({ bandData, onBack }) {
 
                         </div>
 
-                        <button className="btn btn-danger">
+                        <Link
+                            to="#"
+                            className="btn btn-danger"
+                            onClick={(e) => { e.preventDefault(); handleDelete(); }}
+                        >
                             Eliminar banda
-                        </button>
+                        </Link>
 
                     </div>
 

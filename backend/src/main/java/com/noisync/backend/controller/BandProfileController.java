@@ -79,4 +79,4 @@ public class BandProfileController {
         service.deleteSocial(bandId(auth), id);
         return Map.of("ok", true, "message", "Red eliminada");
     }
-}
+} 

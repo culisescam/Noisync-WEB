@@ -10,7 +10,7 @@ public record MeResponse(
         String telefono,
         String estatus,
         Integer primerLogin,
-        Integer activo,
+        Integer activo, 
 
         // info banda
         String bandNombre,
