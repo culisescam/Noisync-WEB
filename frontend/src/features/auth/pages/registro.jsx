@@ -1,15 +1,17 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import AuthHeader from "../components/AuthHeader";
 import FormInput from "../components/FormInput";
 import "../components/styles/registro.css";
 import useForm from "../../hooks/useForm";
 import { registerRequest, saveSession } from "../../../api/authService.js";
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { toastError } from "../../../api/alerts.js";
 
 
 
 function Registro() {
+
+    const navigate = useNavigate();
+
     const initialValues = {
         nombre: "",
         nombreUsuario: "",
@@ -78,8 +80,7 @@ function Registro() {
 
             saveSession(data);
 
-            window.location.href = "/home-leader";
-
+            navigate("/home-leader");
         } catch (err) {
             console.error(err);
             toastError(err?.response?.data?.message || "Error al registrar");

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import SongForm from "../components/songForm.jsx";
 import SongStructure from "../components/SongStructure.jsx";
-import { getSong, getSections, updateSong, updateSection, createSection, deleteSection } from "../../../api/songService.js";
+import { getSong, getSections, updateSong, updateSection, deleteSection } from "../../../api/songService.js";
 import { toastSuccess, toastError } from "../../../api/alerts.js";
 import { api } from "../../../api/api.js";
 

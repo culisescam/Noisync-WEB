@@ -1,7 +1,7 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import "./styles/sidebarLeader.css";
 import { clearSession } from "../../../api/authService";
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { confirmAction } from "../../../api/alerts.js";
 
 
 function SidebarLeader() {

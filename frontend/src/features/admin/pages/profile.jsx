@@ -1,15 +1,12 @@
 import { useEffect, useState } from "react";
 import ProfileCard from "../components/profileCard";
 import { api } from "../../../api/api.js";
+import { toastError } from "../../../api/alerts.js";
 
 
 function Profile() {
 
     const [profileData, setprofileData] = useState(null);
-
-    useEffect(() => {
-        loadProfile();
-    }, []);
 
     const loadProfile = async () => {
         try {
@@ -31,14 +28,20 @@ function Profile() {
             toastError("No se pudo cargar el perfil ");
         }
     };
+
+    useEffect(() => {
+        const fetchProfile = async () => {
+            await loadProfile();
+        };
+
+        fetchProfile();
+    }, []);
+
+
     return (
         <>
             <ProfileCard
-                /*user={profileData.username}
-                name={profileData.nombreCompleto}
-                email={profileData.correo}
-                role={profileData.role}
-                band={profileData.bandNombre} */
+
                 {...profileData}
             />
         </>

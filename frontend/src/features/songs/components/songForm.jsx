@@ -14,7 +14,7 @@ function SongForm({ initialData = {}, onFormChange }) {
 
     useEffect(() => {
         if (onFormChange) onFormChange(formData);
-    }, [formData]);
+    }, [formData, onFormChange]);
 
     const handleChange = (e) => {
         const { name, value, type, checked } = e.target;

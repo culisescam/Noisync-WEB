@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { createInstrument } from "../../../api/instrumentService";
 
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { toastSuccess, toastError } from "../../../api/alerts.js";
 
 
 function AddInstrumentCategoryCard({ onBack }) {

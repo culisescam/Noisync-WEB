@@ -17,7 +17,13 @@ function Instruments() {
         setInstruments(data);
     };
 
-    useEffect(() => { loadInstruments(); }, []);
+    useEffect(() => {
+        const fetch = async () => {
+            await loadInstruments();
+        };
+
+        fetch();
+    }, []);
 
     const handleDelete = async (id) => {
         const result = await confirmDelete("Esta categoría será eliminada.");

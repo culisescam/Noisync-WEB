@@ -2,9 +2,9 @@ import { useRef } from "react";
 
 function SongBlock({ block, updateBlock, deleteBlock }) {
 
-    if (!block) return null;
-
     const textareaRef = useRef(null);
+
+    if (!block) return null;
 
     const insertDegree = (degree) => {
 
@@ -27,7 +27,6 @@ function SongBlock({ block, updateBlock, deleteBlock }) {
             textarea.selectionStart = textarea.selectionEnd = start + 2;
         }, 0);
     };
-
     return (
 
         <div className="card shadow-sm mt-3">

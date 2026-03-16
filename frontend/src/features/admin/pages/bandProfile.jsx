@@ -9,10 +9,6 @@ function BandProfile() {
     const [editing, setEditing] = useState(false);
     const [bandData, setBandData] = useState(null);
 
-    useEffect(() => {
-        loadBand();
-    }, []);
-
     const loadBand = async () => {
         try {
             const bandRes = await api.get("/api/band");
@@ -31,7 +27,7 @@ function BandProfile() {
 
             socials.forEach(s => {
                 const platform = s.plataforma.toLowerCase();
-                if (socialMap.hasOwnProperty(platform)) {
+                if (Object.prototype.hasOwnProperty.call(socialMap, platform)) {
                     socialMap[platform] = s.url;
                 }
             });
@@ -47,6 +43,16 @@ function BandProfile() {
             toastError("No se pudo cargar el perfil de la banda");
         }
     };
+
+    useEffect(() => {
+        const fetchBand = async () => {
+            await loadBand();
+        };
+
+        fetchBand();
+    }, []);
+
+
 
     if (!bandData) return <div className="p-4">Cargando perfil de banda...</div>;
 

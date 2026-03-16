@@ -3,7 +3,7 @@ import InviteMusicianCard from "../components/inviteMusicianCard";
 import MusiciansTable from "../components/MusiciansTable";
 import EditMusicianCard from "../components/editMusicianCard";
 import { getMusicians, removeMusician, resetMusicianPassword } from "../../../api/musicianService";
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { toastSuccess, toastError, confirmDelete, confirmAction } from "../../../api/alerts.js";
 
 function MusicianManagement() {
     const [editingMusician, setEditingMusician] = useState(null);

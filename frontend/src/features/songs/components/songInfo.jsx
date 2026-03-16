@@ -1,7 +1,7 @@
 import "../styles/songInfo.css";
 import SongAvatar from "./songAvatar";
 
-function SongInfo({ titulo, artista, tono, bpm, estado, cover, transposicion, setTransposicion }) {
+function SongInfo({ titulo, artista, tono, bpm, estado, cover, setTransposicion }) {
 
     const subir = () => setTransposicion(t => t + 1);
     const bajar = () => setTransposicion(t => t - 1);

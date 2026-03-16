@@ -4,7 +4,7 @@ import FormInput from "../components/FormInput";
 import "../components/styles/changePassword.css";
 import useForm from "../../hooks/useForm";
 import { api } from "../../../api/api";
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { toastSuccess, toastError } from "../../../api/alerts.js";
 
 
 function ResetPassword() {

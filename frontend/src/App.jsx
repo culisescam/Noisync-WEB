@@ -13,7 +13,6 @@ import ChangePassword from "./features/auth/pages/ChangePassword";
 import Registro from "./features/auth/pages/registro";
 import ForgotPassword from "./features/auth/pages/forgotPassword";
 
-import SongSeachPublic from "./features/songs/pages/searchPublicSongs";
 import VistaPublicaCancion from "./features/songs/pages/vistaPublicaCancion";
 
 import Home from "./pages/home";
@@ -53,7 +52,6 @@ function App() {
           {/* change-password solo si viene de primer login */}
           <Route path="/change-password" element={<ChangePassword />} />
 
-          <Route path="/search-public-songs" element={<SongSeachPublic />} />
           <Route path="/vista-cancion-publica/:id" element={<VistaPublicaCancion />} />
           <Route path="/test-backend" element={<TestBackend />} />
         </Route>

@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { api } from "../../../api/api";
 import { getInstruments } from "../../../api/instrumentService";
 
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { toastSuccess, toastError, toastInfo } from "../../../api/alerts.js";
 
 
 function InviteMusicianCard({ onBack }) {

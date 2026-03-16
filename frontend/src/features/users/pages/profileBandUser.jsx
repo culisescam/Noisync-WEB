@@ -1,4 +1,3 @@
-import BandProfileCard from "../../admin/components/BandProfileCard";
 import BandProfile from "../../admin/pages/bandProfile";
 
 function ProfileBandUser() {

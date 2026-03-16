@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { useSearchParams, Link, useNavigate } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { api } from "../../api/api.js";
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../api/alerts.js";
+import { toastSuccess, toastError } from "../../api/alerts.js";
 
 
 function VerifyEmail() {
@@ -27,7 +27,7 @@ function VerifyEmail() {
             } catch (error) {
                 if (!cancelled) {
                     setMessage("El enlace es inválido o expiró");
-                    toastError("El enlace es inválido o ya fue usado");
+                    toastError("El enlace es inválido o ya fue usado" + error);
                 }
             }
         };
@@ -35,7 +35,7 @@ function VerifyEmail() {
         if (token) verify();
 
         return () => { cancelled = true; };
-    }, [token]);
+    }, [token, navigate]);
 
     return (
         <div style={{ textAlign: "center", marginTop: "120px" }}>
