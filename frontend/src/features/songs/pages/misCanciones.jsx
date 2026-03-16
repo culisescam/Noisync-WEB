@@ -96,6 +96,7 @@ function MisCanciones() {
                             onToggleVisibility={handleToggleVisibility}
                             visibilidad={c.visibilidad}
                             nombreBanda={c.nombreBanda}
+                            fechaCreacion={c.fechaCreacion}
                         />
                     ))}
                 </div>

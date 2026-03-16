@@ -62,6 +62,7 @@ function HomeLeader() {
                             artista={c.artistaAutor}
                             estado={c.visibilidad === "PUBLIC" ? "Pública" : "Privada"}
                             nombreBanda={c.nombreBanda}
+                            fechaCreacion={c.fechaCreacion}
                         />
                     ))}
                 </div>
