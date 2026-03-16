@@ -14,10 +14,11 @@ function SongCard({ id, cover, titulo, artista, nombreBanda, fechaCreacion, esta
 
     const navigate = useNavigate();
     const role = localStorage.getItem("role");
+    const token = localStorage.getItem("accessToken");
 
     const getRoute = () => {
-        if (role === "LEADER") return `/vista-cancion-leader/${id}`;
-        if (role === "MUSICIAN") return `/vista-cancion-user/${id}`;
+        if (token && role === "LEADER") return `/vista-cancion-leader/${id}`;
+        if (token && role === "MUSICIAN") return `/vista-cancion-user/${id}`;
         return `/vista-cancion-publica/${id}`;
     };
 

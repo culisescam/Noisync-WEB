@@ -2,8 +2,9 @@ import { api } from "./api.js";
 
 export async function loginRequest(identifier, password) {
   const res = await api.post("/api/auth/login", { identifier, password });
-  return res.data; 
+  return res.data;
 }
+
 export async function registerRequest(data) {
   const res = await api.post("/api/auth/register-leader", data);
   return res.data;
@@ -17,7 +18,6 @@ export function saveSession(data) {
   localStorage.setItem("bandId", String(data.bandId));
   localStorage.setItem("role", data.role);
 
-  // opcional pero útil para tu flujo
   localStorage.setItem("mustChangePassword", String(data.mustChangePassword));
 }
 
@@ -36,11 +36,13 @@ export function getSession() {
   return {
     accessToken: localStorage.getItem("accessToken"),
     refreshToken: localStorage.getItem("refreshToken"),
-
     userId: localStorage.getItem("userId"),
     bandId: localStorage.getItem("bandId"),
     role: localStorage.getItem("role"),
-
-    mustChangePassword: localStorage.getItem("mustChangePassword") === "true",
+    mustChangePassword: localStorage.getItem("mustChangePassword") === "true"
   };
+}
+
+export function isAuthenticated() {
+  return !!localStorage.getItem("accessToken");
 }

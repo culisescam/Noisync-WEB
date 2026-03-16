@@ -62,7 +62,7 @@ function HomeUser() {
                     ))}
                 </div>
             )}
-
+ 
             <Pagination
                 totalPaginas={totalPaginas}
                 paginaActual={paginaActual + 1}

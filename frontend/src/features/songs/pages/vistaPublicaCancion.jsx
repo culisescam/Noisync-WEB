@@ -12,6 +12,8 @@ function VistaPublicaCancion() {
     const [cancion, setCancion] = useState(null);
     const [secciones, setSecciones] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [transposicion, setTransposicion] = useState(0);
+
 
     const role = localStorage.getItem("role");
     const isLeader = role === "LEADER";
@@ -19,12 +21,13 @@ function VistaPublicaCancion() {
 
     useEffect(() => {
         const role = localStorage.getItem("role");
+        const token = localStorage.getItem("accessToken");
 
         const load = async () => {
             try {
                 let songData, sectionsData;
 
-                if (role === "LEADER" || role === "MUSICIAN") {
+                if (token && (role === "LEADER" || role === "MUSICIAN")) {
                     [songData, sectionsData] = await Promise.all([
                         getSong(id),
                         getSections(id)
@@ -98,14 +101,15 @@ function VistaPublicaCancion() {
                     bpm={cancion.bpm}
                     estado={cancion.visibilidad === "PUBLIC" ? "Pública" : "Privada"}
                     cover={cancion.coverUrl}
+                    setTransposicion={setTransposicion}
+                    transposicion={transposicion}
                 />
 
                 <SongStructureView
                     blocks={secciones}
                     tono={cancion.tonoOriginal}
                     escala={cancion.escalaBase || "Mayor"}
-                    transposicion={0}
-                />
+                    transposicion={transposicion} />
             </main>
         </>
     );

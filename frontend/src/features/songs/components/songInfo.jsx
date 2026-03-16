@@ -1,7 +1,13 @@
 import "../styles/songInfo.css";
 import SongAvatar from "./songAvatar";
 
-function SongInfo({ titulo, artista, tono, bpm, estado, cover }) {
+function SongInfo({ titulo, artista, tono, bpm, estado, cover, transposicion, setTransposicion }) {
+
+    const subir = () => setTransposicion(t => t + 1);
+    const bajar = () => setTransposicion(t => t - 1);
+    const subirMedio = () => setTransposicion(t => t + 1);  // +½ tono = +1 semitono
+    const bajarMedio = () => setTransposicion(t => t - 1);  // -½ tono = -1 semitono
+    const restablecer = () => setTransposicion(0);
 
     return (
         <div className="song-info-card">
@@ -46,16 +52,11 @@ function SongInfo({ titulo, artista, tono, bpm, estado, cover }) {
 
                 <div className="d-flex gap-2 align-items-center">
 
-                    <button className="btn btn-outline-secondary">+1</button>
-                    <button className="btn btn-outline-secondary">-1</button>
-                    <button className="btn btn-outline-secondary">+½</button>
-                    <button className="btn btn-outline-secondary">-½</button>
-
-
-
-                    <button className="btn btn-outline-secondary">
-                        Restablecer
-                    </button>
+                    <button className="btn btn-outline-secondary" onClick={subir}>+1</button>
+                    <button className="btn btn-outline-secondary" onClick={bajar}>-1</button>
+                    <button className="btn btn-outline-secondary" onClick={subirMedio}>+½</button>
+                    <button className="btn btn-outline-secondary" onClick={bajarMedio}>-½</button>
+                    <button className="btn btn-outline-secondary" onClick={restablecer}>Restablecer</button>
 
                 </div>
             </div>
