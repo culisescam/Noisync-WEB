@@ -23,7 +23,7 @@ export async function updateSong(id, data) {
 }
 
 export async function deleteSong(id) {
-    const res = await api.delete(`/api/songs/${id}`);
+    const res = await api.delete(`/api/songs/${id}`); 
     return res.data;
 }
 

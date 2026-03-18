@@ -9,7 +9,7 @@ export const api = axios.create({
 
 let isRedirecting = false;
 
-// REQUEST: adjuntar token
+// adjuntar token
 api.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem("accessToken");
 
@@ -20,7 +20,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// RESPONSE: manejo global de errores
+// manejo global de errores
 api.interceptors.response.use(
   (response) => response,
   (error) => {

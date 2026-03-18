@@ -219,7 +219,7 @@ public class SongService {
         int updated = jdbc.update("""
             UPDATE song
             SET estatus = 'ELIMINADO',
-                updated_by = ?
+                updated_by = ?,
                 fecha_actualizacion = SYSTIMESTAMP
             WHERE band_id = ?
               AND song_id = ?

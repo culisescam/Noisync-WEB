@@ -4,11 +4,11 @@ import SongAvatar from "./songAvatar";
 function SongInfo({ titulo, artista, tono, bpm, estado, cover, setTransposicion, transposicion = 0 }) {
 
     // 1 tono = 2 semitonos en la escala cromática
-    const subirTono     = () => setTransposicion(t => t + 2);
-    const bajarTono     = () => setTransposicion(t => t - 2);
+    const subirTono = () => setTransposicion(t => t + 2);
+    const bajarTono = () => setTransposicion(t => t - 2);
     const subirSemitono = () => setTransposicion(t => t + 1);
     const bajarSemitono = () => setTransposicion(t => t - 1);
-    const restablecer   = () => setTransposicion(0);
+    const restablecer = () => setTransposicion(0);
 
     const mostrarTransposicion = () => {
         if (transposicion === 0) return "Original";
@@ -51,7 +51,7 @@ function SongInfo({ titulo, artista, tono, bpm, estado, cover, setTransposicion,
             <div>
                 <div className="d-flex align-items-center gap-3 mb-2">
                     <p className="fw-semibold mb-0">Controles de transposición</p>
-                    <span className={`badge ${transposicion === 0 ? "bg-secondary" : "bg-success"}`}>
+                    <span className={`badge  text-muted ${transposicion === 0 ? "bg-secondary" : "bg-success"}`}>
                         {mostrarTransposicion()}
                     </span>
                 </div>
