@@ -11,6 +11,7 @@ function MainLayout() {
             </div>
 
             {/* Footer */}
+            <br />
             <Footer />
 
         </div>

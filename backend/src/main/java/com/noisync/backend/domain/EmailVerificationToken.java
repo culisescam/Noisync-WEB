@@ -24,7 +24,7 @@ public class EmailVerificationToken extends BaseAuditEntity {
 
     @Column(name = "USED", nullable = false)
     private Integer used;
-
+ 
     public Long getId() { return id; }
 
     public AppUser getUser() { return user; }

@@ -6,6 +6,7 @@
 
     import java.util.Optional;
 
+
     public interface EmailVerificationTokenRepository extends JpaRepository<EmailVerificationToken, Long> {
 
         Optional<EmailVerificationToken> findByToken(String token);
@@ -13,4 +14,7 @@
         @Modifying
         @Query("update EmailVerificationToken t set t.used = 1 where t.user.userId = :userId and t.used = 0")
         int invalidateActiveTokens(@Param("userId") Long userId);
+
+        Optional<EmailVerificationToken> 
+        findTopByUserUserIdAndUsedOrderByExpiresAtDesc(Long userId, Integer used);
     }

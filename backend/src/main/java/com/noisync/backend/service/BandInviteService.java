@@ -12,7 +12,6 @@ import com.noisync.backend.repository.AppUserRepository;
 
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
-import java.time.Duration;
 import java.util.HexFormat;
 import java.util.UUID;
 

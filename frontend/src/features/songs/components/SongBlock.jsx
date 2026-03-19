@@ -7,7 +7,6 @@ function SongBlock({ block, updateBlock, deleteBlock }) {
     if (!block) return null;
 
     const insertDegree = (degree) => {
-
         const textarea = textareaRef.current;
 
         const start = textarea.selectionStart;
@@ -27,18 +26,27 @@ function SongBlock({ block, updateBlock, deleteBlock }) {
             textarea.selectionStart = textarea.selectionEnd = start + 2;
         }, 0);
     };
-    return (
 
+    const degrees = [
+        { label: "I", value: 1 },
+        { label: "ii", value: 2 },
+        { label: "iii", value: 3 },
+        { label: "IV", value: 4 },
+        { label: "V", value: 5 },
+        { label: "vi", value: 6 },
+        { label: "vii°", value: 7 }
+    ];
+
+    return (
         <div className="card shadow-sm mt-3">
 
             <div className="card-body">
 
-                {/* HEADER */}
-
-                <div className="d-flex justify-content-between align-items-center mb-2">
+                <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-3">
 
                     <select
-                        className="form-select form-select-sm w-auto"
+                        className="form-select form-select-sm"
+                        style={{ maxWidth: "200px" }}
                         value={block.name}
                         onChange={(e) =>
                             updateBlock(block.id, "name", e.target.value)
@@ -61,29 +69,27 @@ function SongBlock({ block, updateBlock, deleteBlock }) {
 
                 </div>
 
-                {/* TOOLBAR DE GRADOS */}
+                <div className="mb-3">
 
-                <div className="mb-2">
-
-                    <small className="text-muted">
+                    <small className="text-muted d-block mb-1">
                         Insertar grado
                     </small>
 
-                    <div className="d-flex gap-2 ms-2">
+                    <div className="d-flex flex-wrap gap-2">
 
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(1)}>I</button>
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(2)}>ii</button>
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(3)}>iii</button>
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(4)}>IV</button>
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(5)}>V</button>
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(6)}>vi</button>
-                        <button className="btn btn-outline-dark" onClick={() => insertDegree(7)}>vii°</button>
+                        {degrees.map((d) => (
+                            <button
+                                key={d.value}
+                                className="btn btn-sm btn-outline-secondary rounded-pill px-3"
+                                onClick={() => insertDegree(d.value)}
+                            >
+                                {d.label}
+                            </button>
+                        ))}
 
                     </div>
 
                 </div>
-
-                {/* TEXTAREA */}
 
                 <textarea
                     ref={textareaRef}
@@ -96,7 +102,7 @@ function SongBlock({ block, updateBlock, deleteBlock }) {
                     }
                 />
 
-                <small className="text-muted">
+                <small className="text-muted d-block mt-2">
                     Tip: usa los botones para insertar grados ($1, $2, $3...)
                 </small>
 

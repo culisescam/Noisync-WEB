@@ -25,9 +25,11 @@ public class BandProfileController {
         return ((Number) details.get("bandId")).longValue();
     }
 
-    private boolean isLeader(Authentication auth) {
-        return auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_LEADER"));
-    }
+private boolean isLeader(Authentication auth) {
+    return auth.getAuthorities()
+        .stream()
+        .anyMatch(a -> a.getAuthority().contains("LEADER"));
+}
 
     // GET /api/band
     @GetMapping
@@ -79,4 +81,18 @@ public class BandProfileController {
         service.deleteSocial(bandId(auth), id);
         return Map.of("ok", true, "message", "Red eliminada");
     }
+
+    @DeleteMapping
+public Map<String, Object> delete(Authentication auth) {
+    if (!isLeader(auth)) {
+        throw new IllegalArgumentException("Solo un lider puede eliminar la banda");
+    }
+
+    service.deleteBand(bandId(auth));
+
+    return Map.of(
+        "ok", true,
+        "message", "Banda eliminada"
+    );
+}
 } 

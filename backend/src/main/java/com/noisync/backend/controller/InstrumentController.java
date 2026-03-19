@@ -2,10 +2,12 @@ package com.noisync.backend.controller;
 
 import com.noisync.backend.dto.InstrumentRequest;
 import com.noisync.backend.dto.InstrumentResponse;
+import com.noisync.backend.dto.MusicianResponse;
 import com.noisync.backend.service.InstrumentService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
+import  com.noisync.backend.dto.MusicianResponse;
 
 import java.util.List;
 import java.util.Map;
@@ -57,4 +59,8 @@ public class InstrumentController {
         service.delete(bandId(auth), id);
         return Map.of("ok", true, "message", "Instrumento eliminado");
     }
+    @GetMapping("/{id}/musicians")
+    public List<MusicianResponse> listMusicians(@PathVariable Long id, Authentication auth) {
+    return service.listMusiciansByInstrument(bandId(auth), id);
+}
 }

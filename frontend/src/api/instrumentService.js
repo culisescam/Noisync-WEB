@@ -19,3 +19,8 @@ export async function deleteInstrument(id) {
     const res = await api.delete(`/api/instruments/${id}`);
     return res.data;
 }
+
+export async function getMusiciansByInstrument(id) {
+    const res = await api.get(`/api/instruments/${id}/musicians`);
+    return res.data;
+}

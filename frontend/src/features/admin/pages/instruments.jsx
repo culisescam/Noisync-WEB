@@ -28,23 +28,20 @@ function Instruments() {
     const handleDelete = async (id) => {
         const result = await confirmDelete("Esta categoría será eliminada.");
         if (!result.isConfirmed) return;
+
         try {
             await deleteInstrument(id);
             toastSuccess("Categoría eliminada correctamente");
             loadInstruments();
+
         } catch (error) {
+
             if (error.response?.data?.message === "EN_USO") {
-                const result2 = await confirmAction(
-                    "Categoría en uso",
-                    "Hay músicos usando este rol, ¿deseas eliminarlo de sus perfiles?",
-                    "Sí, eliminar"
-                );
-                if (result2.isConfirmed) {
-                    toastInfo("Funcionalidad de reasignación pendiente.");
-                }
+                toastError("No puedes eliminar esta categoría porque hay músicos asignados.");
             } else {
                 toastError("No se pudo eliminar el instrumento.");
             }
+
         }
     };
 
@@ -94,6 +91,7 @@ function Instruments() {
                         instruments={filtered}
                         isLeader={isLeader}
                         onDelete={handleDelete}
+                        onUpdated={loadInstruments}
                     />
                 </div>
             </div>

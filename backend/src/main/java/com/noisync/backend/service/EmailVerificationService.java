@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Service
+@Service 
 public class EmailVerificationService {
 
     private final EmailVerificationTokenRepository tokenRepo;
@@ -78,4 +78,26 @@ public class EmailVerificationService {
         t.setUsed(1);
         tokenRepo.save(t);
     }
+
+@Transactional
+public void resendVerification(String email) {
+
+    AppUser user = appUserRepo.findByCorreo(email)
+            .orElseThrow(() -> new IllegalArgumentException("OK"));
+
+if (user.getActivo() == 1 && "ACTIVO".equals(user.getEstatus())) {
+    throw new IllegalArgumentException("YA_VERIFICADO");
+}
+
+    tokenRepo
+        .findTopByUserUserIdAndUsedOrderByExpiresAtDesc(user.getUserId(), 0)
+        .ifPresent(t -> {
+            if (t.getCreatedAt() != null &&
+                t.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(2))) {
+                throw new IllegalArgumentException("COOLDOWN");
+            }
+        });
+
+    sendVerification(user);
+}
 }

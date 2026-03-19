@@ -1,22 +1,22 @@
 function ChromaticScale() {
-
     return (
-        <>
-            <div className="card mt-4">
+        <div className="card mt-4 shadow-sm">
 
-                <div className="card-body">
+            <div className="card-body">
 
-                    <h6 className="fw-bold">
-                        Escala cromática
-                    </h6>
+                <h6 className="fw-bold">
+                    Escala cromática
+                </h6>
 
-                    <p className="text-muted small">
-                        Tabla de referencia
-                    </p>
+                <p className="text-muted small">
+                    Tabla de referencia
+                </p>
 
-                    <table className="table table-bordered text-center small">
+                <div className="table-responsive">
 
-                        <thead>
+                    <table className="table table-bordered text-center small mb-0">
+
+                        <thead className="table-light">
                             <tr>
                                 <th>Grados</th>
                                 <th>I</th>
@@ -31,7 +31,7 @@ function ChromaticScale() {
 
                         <tbody>
                             <tr>
-                                <td>Notas</td>
+                                <td className="fw-semibold">Notas</td>
                                 <td>C</td>
                                 <td>D</td>
                                 <td>E</td>
@@ -42,7 +42,7 @@ function ChromaticScale() {
                             </tr>
 
                             <tr>
-                                <td>Comodín</td>
+                                <td className="fw-semibold">Comodín</td>
                                 <td>$1</td>
                                 <td>$2</td>
                                 <td>$3</td>
@@ -58,7 +58,7 @@ function ChromaticScale() {
                 </div>
 
             </div>
-        </>
+        </div>
     );
 }
 

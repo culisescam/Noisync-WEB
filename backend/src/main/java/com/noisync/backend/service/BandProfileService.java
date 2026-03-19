@@ -110,4 +110,28 @@ public class BandProfileService {
     private Instant toInstant(Timestamp ts) {
         return ts == null ? null : ts.toInstant();
     }
+
+@Transactional
+public void deleteBand(Long bandId) {
+    jdbc.update("DELETE FROM musician_instrument WHERE instrument_id IN (SELECT instrument_id FROM instrument WHERE band_id = ?)", bandId);
+    jdbc.update("DELETE FROM password_reset_token WHERE user_id IN (SELECT user_id FROM app_user WHERE band_id = ?)", bandId);
+    jdbc.update("DELETE FROM email_verification WHERE user_id IN (SELECT user_id FROM app_user WHERE band_id = ?)", bandId);
+    jdbc.update("DELETE FROM email_verification_token WHERE user_id IN (SELECT user_id FROM app_user WHERE band_id = ?)", bandId);
+    jdbc.update("DELETE FROM refresh_token WHERE user_id IN (SELECT user_id FROM app_user WHERE band_id = ?)", bandId);
+    jdbc.update("DELETE FROM band_invitation WHERE band_id = ?", bandId);
+    jdbc.update("DELETE FROM band_social WHERE band_id = ?", bandId);
+    jdbc.update("DELETE FROM song_section WHERE song_id IN (SELECT song_id FROM song WHERE band_id = ?)", bandId);
+    jdbc.update("DELETE FROM song WHERE band_id = ?", bandId);
+    jdbc.update("DELETE FROM instrument WHERE band_id = ?", bandId);
+    // Guardar person_ids antes de borrar usuarios
+    List<Long> personIds = jdbc.queryForList(
+        "SELECT person_id FROM app_user WHERE band_id = ?", Long.class, bandId
+    );
+    jdbc.update("DELETE FROM app_user WHERE band_id = ?", bandId);
+    // Ahora sí borrar persons
+    for (Long personId : personIds) {
+        jdbc.update("DELETE FROM person WHERE person_id = ?", personId);
+    }
+    jdbc.update("DELETE FROM band WHERE band_id = ?", bandId);
+}
 }

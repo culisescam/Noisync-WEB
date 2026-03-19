@@ -23,6 +23,6 @@ public class EmailService {
         msg.setTo(to);
         msg.setSubject(subject);
         msg.setText(body);
-        mailSender.send(msg);
+        mailSender.send(msg); 
     }
 }

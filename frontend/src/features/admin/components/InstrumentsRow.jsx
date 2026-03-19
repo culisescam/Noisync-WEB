@@ -1,18 +1,102 @@
-function InstrumentsRow({ instrument, isLeader, onDelete }) {
+import { useState } from "react";
+import { updateInstrument, getMusiciansByInstrument } from "../../../api/instrumentService";
+import { toastSuccess, toastError } from "../../../api/alerts";
+
+function InstrumentsRow({ instrument, isLeader, onDelete, onUpdated, onOpenModal }) {
+    const [editing, setEditing] = useState(false);
+    const [nombre, setNombre] = useState(instrument.nombre);
+    const [loading, setLoading] = useState(false);
+    const [loadingMusicians, setLoadingMusicians] = useState(false);
+
+
+    const handleSave = async () => {
+        if (!nombre.trim()) return;
+        setLoading(true);
+        try {
+            await updateInstrument(instrument.instrumentId, nombre.trim());
+            toastSuccess("Instrumento actualizado");
+            setEditing(false);
+            if (onUpdated) onUpdated();
+        } catch (e) {
+            toastError("No se pudo actualizar");
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const handleKeyDown = (e) => {
+        if (e.key === "Enter") handleSave();
+        if (e.key === "Escape") { setNombre(instrument.nombre); setEditing(false); }
+    };
+
+    const handleRowClick = async () => {
+        if (editing) return;
+        setShowModal(true);
+        setLoadingMusicians(true);
+        try {
+            const data = await getMusiciansByInstrument(instrument.instrumentId);
+            setMusicians(data);
+        } catch (e) {
+            toastError("No se pudo cargar los músicos");
+        } finally {
+            setLoadingMusicians(false);
+        }
+    };
+
     return (
-        <tr>
-            <td>{instrument.nombre}</td>
-            {isLeader && (
-                <td>
-                    <button
-                        className="btn btn-sm btn-outline-danger"
-                        onClick={() => onDelete(instrument.instrumentId)}
-                    >
-                        Eliminar
-                    </button>
+        <>
+            <tr
+                onClick={() => onOpenModal(instrument)}
+                style={{ cursor: "pointer" }}
+                className="align-middle"
+            >
+                <td onClick={e => editing && e.stopPropagation()}>
+                    {editing ? (
+                        <input
+                            type="text"
+                            className="form-control form-control-sm"
+                            value={nombre}
+                            onChange={e => setNombre(e.target.value)}
+                            onKeyDown={handleKeyDown}
+                            autoFocus
+                        />
+                    ) : (
+                        <div>
+                            <span>{instrument.nombre}</span>
+                            <small className="text-muted d-block">
+                                {instrument.totalMusicos} músico{instrument.totalMusicos !== 1 ? "s" : ""}
+                            </small>
+                        </div>
+                    )}
                 </td>
-            )}
-        </tr>
+                {isLeader && (
+                    <td onClick={e => e.stopPropagation()}>
+                        <div className="d-flex gap-2">
+                            {editing ? (
+                                <>
+                                    <button className="btn btn-sm btn-success" onClick={handleSave} disabled={loading} title="Guardar">
+                                        <i className="bi bi-check-lg"></i>
+                                    </button>
+                                    <button className="btn btn-sm btn-outline-secondary" onClick={() => { setNombre(instrument.nombre); setEditing(false); }} title="Cancelar">
+                                        <i className="bi bi-x-lg"></i>
+                                    </button>
+                                </>
+                            ) : (
+                                <>
+                                    <button className="btn btn-sm btn-outline-dark" onClick={() => setEditing(true)} title="Editar">
+                                        <i className="bi bi-pencil"></i>
+                                    </button>
+                                    <button className="btn btn-sm btn-outline-danger" onClick={() => onDelete(instrument.instrumentId)} title="Eliminar">
+                                        <i className="bi bi-trash"></i>
+                                    </button>
+                                </>
+                            )}
+                        </div>
+                    </td>
+                )}
+            </tr>
+
+        </>
     );
 }
 

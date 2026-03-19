@@ -46,3 +46,8 @@ export function getSession() {
 export function isAuthenticated() {
   return !!localStorage.getItem("accessToken");
 }
+
+export async function resendVerification(email) {
+    const res = await api.post("/api/auth/resend-verification", { email });
+    return res.data;
+}

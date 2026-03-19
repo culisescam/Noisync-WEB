@@ -4,5 +4,6 @@ public record InstrumentResponse(
         Long instrumentId,
         Long bandId,
         String nombre,
-        Integer activo
+        Integer activo,
+         Integer totalMusicos 
 ) {}

@@ -1,6 +1,9 @@
+import { useState } from "react";
 import InstrumentsRow from "./InstrumentsRow";
+import MusiciansModal from "./MusiciansModal";
 
-function IntrumentsTable({ instruments, isLeader, onDelete }) {
+function IntrumentsTable({ instruments, isLeader, onDelete, onUpdated }) {
+    const [selectedInstrument, setSelectedInstrument] = useState(null);
     return (
         <div className="table-responsive">
             <table className="table">
@@ -20,11 +23,21 @@ function IntrumentsTable({ instruments, isLeader, onDelete }) {
                                 instrument={instrument}
                                 isLeader={isLeader}
                                 onDelete={onDelete}
+                                onUpdated={onUpdated}
+                                onOpenModal={setSelectedInstrument}
+
+
                             />
                         ))
                     )}
                 </tbody>
             </table>
+            {selectedInstrument && (
+                <MusiciansModal
+                    instrument={selectedInstrument}
+                    onClose={() => setSelectedInstrument(null)}
+                />
+            )}
         </div>
     );
 }

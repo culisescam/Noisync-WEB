@@ -41,7 +41,9 @@ private final RowMapper<MusicianResponse> musicianMapper = (rs, rn) -> {
             rs.getLong("instrument_id"),
             rs.getLong("band_id"),
             rs.getString("nombre"),
-            rs.getInt("activo")
+            rs.getInt("activo"),
+            rs.getInt("total_musicos")
+
     );
 
 public List<MusicianResponse> listMusicians(Long bandId) {
