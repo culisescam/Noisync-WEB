@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Service 
+@Service
 public class EmailVerificationService {
 
     private final EmailVerificationTokenRepository tokenRepo;
@@ -61,7 +61,14 @@ public class EmailVerificationService {
         EmailVerificationToken t = tokenRepo.findByToken(token)
                 .orElseThrow(() -> new IllegalArgumentException("Código inválido."));
 
+        AppUser user = t.getUser();
+
+        // Idempotente: si el token ya fue usado pero el usuario ya está activo,
+        // simplemente retornamos éxito (cubre doble llamada por React StrictMode / doble clic)
         if (t.getUsed() == 1) {
+            if (user.getActivo() == 1 && "ACTIVO".equals(user.getEstatus())) {
+                return; // ya verificado → ok
+            }
             throw new IllegalArgumentException("Código ya utilizado.");
         }
 
@@ -69,35 +76,33 @@ public class EmailVerificationService {
             throw new IllegalArgumentException("Código expirado.");
         }
 
-        AppUser user = t.getUser();
         user.setActivo(1);
         user.setEstatus("ACTIVO");
-
         appUserRepo.save(user);
 
         t.setUsed(1);
         tokenRepo.save(t);
     }
 
-@Transactional
-public void resendVerification(String email) {
+    @Transactional
+    public void resendVerification(String email) {
 
-    AppUser user = appUserRepo.findByCorreo(email)
-            .orElseThrow(() -> new IllegalArgumentException("OK"));
+        AppUser user = appUserRepo.findByCorreo(email)
+                .orElseThrow(() -> new IllegalArgumentException("OK"));
 
-if (user.getActivo() == 1 && "ACTIVO".equals(user.getEstatus())) {
-    throw new IllegalArgumentException("YA_VERIFICADO");
-}
+        if (user.getActivo() == 1 && "ACTIVO".equals(user.getEstatus())) {
+            throw new IllegalArgumentException("YA_VERIFICADO");
+        }
 
-    tokenRepo
-        .findTopByUserUserIdAndUsedOrderByExpiresAtDesc(user.getUserId(), 0)
-        .ifPresent(t -> {
-            if (t.getCreatedAt() != null &&
-                t.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(2))) {
-                throw new IllegalArgumentException("COOLDOWN");
-            }
-        });
+        tokenRepo
+                .findTopByUserUserIdAndUsedOrderByExpiresAtDesc(user.getUserId(), 0)
+                .ifPresent(t -> {
+                    if (t.getCreatedAt() != null &&
+                            t.getCreatedAt().isAfter(LocalDateTime.now().minusMinutes(2))) {
+                        throw new IllegalArgumentException("COOLDOWN");
+                    }
+                });
 
-    sendVerification(user);
-}
+        sendVerification(user);
+    }
 }

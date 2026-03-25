@@ -83,7 +83,7 @@ function SongForm({ initialData = {}, onFormChange }) {
                     </div>
 
                     {/* TONO */}
-                    <div className="col-md-3">
+                    <div className="col-6 col-md-3">
                         <label className="form-label">Tono original *</label>
                         <div className="input-group">
                             <span className="input-group-text"><i className="bi bi-music-note-beamed"></i></span>
@@ -96,7 +96,7 @@ function SongForm({ initialData = {}, onFormChange }) {
                     </div>
 
                     {/* ESCALA BASE */}
-                    <div className="col-md-3">
+                    <div className="col-6 col-md-3">
                         <label className="form-label">Escala *</label>
                         <select className="form-select" name="escalaBase" value={formData.escalaBase} onChange={handleChange}>
                             <option value="Mayor">Mayor</option>

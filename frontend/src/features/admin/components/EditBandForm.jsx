@@ -280,7 +280,7 @@ function EditBandForm({ bandData, onBack }) {
                         Las acciones en esta sección son irreversibles. Procede con precaución.
                     </p>
 
-                    <div className="d-flex justify-content-between align-items-center border rounded p-3 bg-white">
+                    <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 border rounded p-3 bg-white">
 
                         <div>
 
@@ -303,7 +303,7 @@ function EditBandForm({ bandData, onBack }) {
 
                         <Link
                             to="#"
-                            className="btn btn-danger"
+                            className="btn btn-danger w-100 w-sm-auto flex-shrink-0"
                             onClick={(e) => { e.preventDefault(); handleDelete(); }}
                         >
                             Eliminar banda

@@ -11,6 +11,33 @@ function Login() {
     const navigate = useNavigate();
 
     const [showVerifyAlert, setShowVerifyAlert] = useState(false);
+    const [resendEmail, setResendEmail] = useState("");
+    const [resendLoading, setResendLoading] = useState(false);
+
+    const identifierIsEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v?.trim());
+
+    const handleResend = async () => {
+        const emailToUse = identifierIsEmail(values.identifier)
+            ? values.identifier.trim()
+            : resendEmail.trim();
+
+        if (!emailToUse || !identifierIsEmail(emailToUse)) {
+            toastError("Ingresa un correo válido para reenviar el enlace.");
+            return;
+        }
+
+        setResendLoading(true);
+        try {
+            const msg = await resendVerification(emailToUse);
+            toastSuccess(msg || "Correo de verificación enviado.");
+            setShowVerifyAlert(false);
+        } catch (e) {
+            const msg = e.response?.data;
+            toastError(typeof msg === "string" ? msg : "Espera antes de reenviar.");
+        } finally {
+            setResendLoading(false);
+        }
+    };
 
     const initialValues = {
         identifier: "",
@@ -38,15 +65,6 @@ function Login() {
 
     const { values, errors, submitIntentado, handleChange, handleSubmit } =
         useForm(initialValues, validar);
-
-    const handleResend = async () => {
-        try {
-            const msg = await resendVerification(values.identifier);
-            toastSuccess(msg);
-        } catch (e) {
-            toastError(e.response?.data || "Espera antes de reenviar");
-        }
-    };
 
     const onValidSubmit = async (vals) => {
         try {
@@ -90,20 +108,43 @@ function Login() {
                 </p>
 
                 {showVerifyAlert && (
-                    <div className="alert alert-warning d-flex justify-content-between align-items-center">
-
-                        <div>
-                            <strong>Correo no verificado.</strong><br />
-                            Verifica tu correo para continuar.
+                    <div className="alert alert-warning">
+                        <div className="d-flex justify-content-between align-items-start gap-2">
+                            <div>
+                                <strong>Correo no verificado.</strong><br />
+                                Verifica tu correo para continuar.
+                            </div>
+                            <button
+                                type="button"
+                                className="btn-close flex-shrink-0 mt-1"
+                                onClick={() => setShowVerifyAlert(false)}
+                            />
                         </div>
 
-                        <button
-                            className="btn btn-sm btn-outline-dark ms-3"
-                            onClick={handleResend}
-                        >
-                            Reenviar
-                        </button>
+                        {/* Si el usuario ingresó un username (sin @), pedimos el correo */}
+                        {!identifierIsEmail(values.identifier) && (
+                            <div className="mt-2">
+                                <input
+                                    type="email"
+                                    className="form-control form-control-sm"
+                                    placeholder="Ingresa tu correo para reenviar"
+                                    value={resendEmail}
+                                    onChange={e => setResendEmail(e.target.value)}
+                                />
+                            </div>
+                        )}
 
+                        <div className="mt-2">
+                            <button
+                                className="btn btn-sm btn-outline-dark w-100"
+                                onClick={handleResend}
+                                disabled={resendLoading}
+                            >
+                                {resendLoading
+                                    ? <><span className="spinner-border spinner-border-sm me-1" role="status" />Enviando...</>
+                                    : "Reenviar correo de verificación"}
+                            </button>
+                        </div>
                     </div>
                 )}
 

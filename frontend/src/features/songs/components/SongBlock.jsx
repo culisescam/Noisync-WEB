@@ -100,6 +100,13 @@ function SongBlock({ block, updateBlock, deleteBlock }) {
                     onChange={(e) =>
                         updateBlock(block.id, "content", e.target.value)
                     }
+                    style={{
+                        whiteSpace: "pre",
+                        overflowX: "auto",
+                        overflowY: "auto",
+                        resize: "vertical",
+                        fontFamily: "monospace"
+                    }}
                 />
 
                 <small className="text-muted d-block mt-2">

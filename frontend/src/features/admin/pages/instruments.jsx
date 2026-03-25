@@ -1,14 +1,16 @@
 import { useState, useEffect } from "react";
 import IntrumentsTable from "../components/InstrumentsTable";
 import AddInstrumentCategoryCard from "../components/addInstrumentCategoryCard";
+import InstrumentReassignModal from "../components/InstrumentReassignModal";
 import { getInstruments, deleteInstrument } from "../../../api/instrumentService";
 
-import { toastSuccess, toastError, toastInfo, confirmDelete, confirmAction } from "../../../api/alerts.js";
+import { toastSuccess, toastError, confirmDelete } from "../../../api/alerts.js";
 
 function Instruments() {
     const [showAdd, setShowAdd] = useState(false);
     const [instruments, setInstruments] = useState([]);
     const [search, setSearch] = useState("");
+    const [reassignInstrument, setReassignInstrument] = useState(null); // instrumento pendiente de reasignación
 
     const isLeader = localStorage.getItem("role") === "LEADER";
 
@@ -37,11 +39,34 @@ function Instruments() {
         } catch (error) {
 
             if (error.response?.data?.message === "EN_USO") {
-                toastError("No puedes eliminar esta categoría porque hay músicos asignados.");
+                // Buscar el instrumento completo para pasarlo al modal
+                const inst = instruments.find(i => i.instrumentId === id);
+                if (inst) {
+                    // Normalizar el objeto para el modal
+                    setReassignInstrument({
+                        id: inst.instrumentId,
+                        nombre: inst.nombre
+                    });
+                } else {
+                    toastError("No puedes eliminar esta categoría porque hay músicos asignados.");
+                }
             } else {
                 toastError("No se pudo eliminar el instrumento.");
             }
 
+        }
+    };
+
+    // Ejecutar el delete real después de que el modal reasignó los músicos
+    const handleReassignConfirm = async () => {
+        if (!reassignInstrument) return;
+        try {
+            await deleteInstrument(reassignInstrument.id);
+            toastSuccess("Categoría eliminada correctamente");
+            setReassignInstrument(null);
+            loadInstruments();
+        } catch {
+            toastError("No se pudo eliminar el instrumento.");
         }
     };
 
@@ -55,6 +80,14 @@ function Instruments() {
 
     return (
         <>
+            {/* Modal de reasignación */}
+            {reassignInstrument && (
+                <InstrumentReassignModal
+                    instrument={reassignInstrument}
+                    onConfirm={handleReassignConfirm}
+                    onCancel={() => setReassignInstrument(null)}
+                />
+            )}
             <div className="card shadow-sm mb-4">
                 <div className="card-body">
                     <h5 className="mb-0">Categorías de Instrumentos</h5>
