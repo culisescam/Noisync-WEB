@@ -1,11 +1,8 @@
 import { useState, useEffect } from "react";
 import { getInstruments, getMusiciansByInstrument } from "../../../api/instrumentService";
 import { api } from "../../../api/api";
+import { toastError } from "../../../api/alerts";
 
-/**
- * Modal que aparece cuando se intenta eliminar un instrumento que tiene músicos asignados.
- * Permite reasignar esos músicos a otro instrumento (o dejarlo sin instrumento) antes de eliminar.
- */
 function InstrumentReassignModal({ instrument, onConfirm, onCancel }) {
     const [musicians, setMusicians] = useState([]);
     const [otherInstruments, setOtherInstruments] = useState([]);
@@ -20,7 +17,8 @@ function InstrumentReassignModal({ instrument, onConfirm, onCancel }) {
                 getInstruments()
             ]);
             setMusicians(musicianList);
-            setOtherInstruments(allInstruments.filter(i => i.id !== instrument.id));
+            // Excluir el instrumento que se va a eliminar usando instrumentId
+            setOtherInstruments(allInstruments.filter(i => i.instrumentId !== instrument.id));
             setLoading(false);
         };
         load();
@@ -29,19 +27,31 @@ function InstrumentReassignModal({ instrument, onConfirm, onCancel }) {
     const handleConfirm = async () => {
         setSaving(true);
         try {
-            // Para cada músico asignado: desasignar el instrumento a eliminar
+            // 1. Para cada músico: quitar el instrumento que se va a eliminar
             for (const musician of musicians) {
-                await api.delete(`/api/musicians/${musician.userId}/instruments/${instrument.id}`);
+                await api.delete(
+                    `/api/musicians/${musician.userId}/instruments/${instrument.id}`
+                );
+            }
 
-                // Si el líder eligió reasignar a otro instrumento, asignarlo
-                if (selectedInstrumentId) {
-                    await api.post(`/api/musicians/${musician.userId}/instruments/${selectedInstrumentId}`);
+            // 2. Si se eligió reasignar, asignar el nuevo instrumento
+            if (selectedInstrumentId) {
+                for (const musician of musicians) {
+                    try {
+                        await api.post(
+                            `/api/musicians/${musician.userId}/instruments/${selectedInstrumentId}`
+                        );
+                    } catch {
+                        // Puede fallar si ya tenía ese instrumento asignado — ignorar duplicado
+                    }
                 }
             }
-            // Ya sin músicos asignados, eliminar el instrumento
+
+            // 3. Ejecutar el delete del instrumento en el padre
             onConfirm();
         } catch (err) {
             console.error("Error reasignando músicos:", err);
+            toastError("No se pudo reasignar. Verifica la conexión e intenta de nuevo.");
             setSaving(false);
         }
     };
@@ -117,7 +127,7 @@ function InstrumentReassignModal({ instrument, onConfirm, onCancel }) {
                                     >
                                         <option value="">— Sin categoría (solo quitar) —</option>
                                         {otherInstruments.map(i => (
-                                            <option key={i.id} value={i.id}>
+                                            <option key={i.instrumentId} value={i.instrumentId}>
                                                 {i.nombre}
                                             </option>
                                         ))}

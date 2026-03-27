@@ -124,25 +124,26 @@ public class InstrumentService {
     @Transactional
     public void delete(Long bandId, Long instrumentId) {
 
-        Integer enUso = jdbc.queryForObject(
-                "SELECT COUNT(*) FROM musician_instrument WHERE instrument_id = ?",
-                Integer.class, instrumentId
-        );
+        // Solo bloquear si hay músicos ACTIVOS asignados
+        Integer enUso = jdbc.queryForObject("""
+            SELECT COUNT(*) FROM musician_instrument mi
+            JOIN app_user u ON u.user_id = mi.user_id
+            WHERE mi.instrument_id = ? AND u.activo = 1
+        """, Integer.class, instrumentId);
+
         if (enUso != null && enUso > 0) throw new IllegalArgumentException("EN_USO");
 
+        // Limpiar relaciones (incluyendo músicos inactivos) antes del hard delete
+        // para no violar la FK musician_instrument → instrument
         jdbc.update("""
             DELETE FROM musician_instrument
             WHERE instrument_id = ?
         """, instrumentId);
 
-        int updated = jdbc.update("""
-            UPDATE instrument
-            SET activo = 0
+        jdbc.update("""
+            DELETE FROM instrument
             WHERE instrument_id = ?
               AND band_id = ?
-              AND activo = 1
         """, instrumentId, bandId);
-
-        if (updated == 0) throw new IllegalArgumentException("Instrumento no encontrado");
     }
 }

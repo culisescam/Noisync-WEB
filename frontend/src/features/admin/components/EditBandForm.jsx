@@ -303,7 +303,7 @@ function EditBandForm({ bandData, onBack }) {
 
                         <Link
                             to="#"
-                            className="btn btn-danger w-100 w-sm-auto flex-shrink-0"
+                            className="btn btn-danger flex-shrink-0"
                             onClick={(e) => { e.preventDefault(); handleDelete(); }}
                         >
                             Eliminar banda
