@@ -16,8 +16,10 @@ public class CorsConfig {
         CorsConfiguration config = new CorsConfiguration();
 
         // Origen de tu front Vite
-        config.setAllowedOrigins(List.of("http://localhost:5173"));
-
+config.setAllowedOrigins(List.of(
+    "http://localhost:5173",
+    "https://noisync-app.netlify.app"  
+));
         // Métodos
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         // Headers permitidos (incluye Authorization para JWT)
