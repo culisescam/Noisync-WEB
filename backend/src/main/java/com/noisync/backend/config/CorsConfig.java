@@ -24,8 +24,7 @@ config.setAllowedOrigins(List.of(
         // Métodos
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"));
         // Headers permitidos (incluye Authorization para JWT)
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-
+config.setAllowedHeaders(List.of("Authorization", "Content-Type", "ngrok-skip-browser-warning"));
         // Headers expuestos (si algún día los necesitas)
         config.setExposedHeaders(List.of("Authorization"));
 
