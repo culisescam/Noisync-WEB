@@ -2,15 +2,32 @@ import Pagination from "../../shared/components/Pagination";
 import SongCard from "../../songs/components/SongCard";
 import "../components/styles/homeLeader.css";
 import { Link } from "react-router-dom";
-import { useSongs } from "../../hooks/useSongs";
-import Filters from "../../shared/components/Filters";
-
+import { useState, useEffect } from "react";
+import { getPublicSongs } from "../../../api/songService";
 
 function HomeLeader() {
-    const {
-        canciones, totalPaginas, paginaActual, setPaginaActual,
-        busqueda, setBusqueda, filtro, setFiltro, loading
-    } = useSongs();
+    const [canciones, setCanciones] = useState([]);
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [paginaActual, setPaginaActual] = useState(0);
+    const [busqueda, setBusqueda] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    const load = async (page = 0, q = "") => {
+        try {
+            setLoading(true);
+            const data = await getPublicSongs(page, 8, q);
+            setCanciones(data.content);
+            setTotalPaginas(data.totalPages);
+        } catch (e) {
+            console.error("Error cargando canciones:", e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        load(paginaActual, busqueda);
+    }, [paginaActual, busqueda]);
 
     return (
         <>
@@ -31,13 +48,7 @@ function HomeLeader() {
                             />
                         </div>
                     </div>
-                    <Filters
-                        filtro={filtro}
-                        setFiltro={(value) => {
-                            setFiltro(value);
-                            setPaginaActual(0);
-                        }}
-                    />                </div>
+                </div>
                 <Link to="/record-song" className="btn btn-dark px-4 py-2 align-self-start align-self-lg-auto" style={{ whiteSpace: "nowrap" }}>
                     + Registrar canción
                 </Link>

@@ -28,10 +28,19 @@ function VistaPublicaCancion() {
                 let songData, sectionsData;
 
                 if (token && (role === "LEADER" || role === "MUSICIAN")) {
-                    [songData, sectionsData] = await Promise.all([
-                        getSong(id),
-                        getSections(id)
-                    ]);
+                    try {
+                        // Intentar con endpoints privados (canciones de tu banda)
+                        [songData, sectionsData] = await Promise.all([
+                            getSong(id),
+                            getSections(id)
+                        ]);
+                    } catch (err) {
+                        // Si falla (canción de otra banda), usar endpoints públicos
+                        [songData, sectionsData] = await Promise.all([
+                            getPublicSong(id),
+                            getPublicSections(id)
+                        ]);
+                    }
                 } else {
                     [songData, sectionsData] = await Promise.all([
                         getPublicSong(id),

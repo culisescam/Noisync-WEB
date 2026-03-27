@@ -1,15 +1,33 @@
 import SongCard from "../../songs/components/SongCard";
 import Pagination from "../../shared/components/Pagination";
-import { useSongs } from "../../hooks/useSongs";
-import Filters from "../../shared/components/Filters";
-
+import { getPublicSongs } from "../../../api/songService";
+import { useState, useEffect } from "react";
 
 
 function HomeUser() {
-    const {
-        canciones, totalPaginas, paginaActual, setPaginaActual,
-        busqueda, setBusqueda, filtro, setFiltro, loading
-    } = useSongs();
+    const [canciones, setCanciones] = useState([]);
+    const [totalPaginas, setTotalPaginas] = useState(0);
+    const [paginaActual, setPaginaActual] = useState(0);
+    const [busqueda, setBusqueda] = useState("");
+    const [loading, setLoading] = useState(true);
+
+    const load = async (page = 0, q = "") => {
+        try {
+            setLoading(true);
+            const data = await getPublicSongs(page, 8, q);
+            setCanciones(data.content);
+            setTotalPaginas(data.totalPages);
+        } catch (e) {
+            console.error("Error cargando canciones:", e);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        load(paginaActual, busqueda);
+    }, [paginaActual, busqueda]);
+
 
     return (
         <>
@@ -30,13 +48,6 @@ function HomeUser() {
                             />
                         </div>
                     </div>
-                    <Filters
-                        filtro={filtro}
-                        setFiltro={(value) => {
-                            setFiltro(value);
-                            setPaginaActual(0);
-                        }}
-                    />
                 </div>
             </div>
 

@@ -46,25 +46,27 @@ function renderizarLinea(linea, tonica, escala, transposicion) {
 
     // Renderiza acordes arriba, letra abajo
     return (
-        <div style={{ fontFamily: "monospace", whiteSpace: "pre" }}>
-            {/* Línea de acordes */}
-            <div className="text-success fw-semibold">
-                {pares.map((par, idx) => {
-                    const espacioTexto = par.texto.length;
-                    const espacioAcorde = par.acorde.length;
-                    const padding = Math.max(espacioTexto, espacioAcorde + 1);
-                    return (
-                        <span key={idx} style={{ display: "inline-block", minWidth: `${padding}ch` }}>
-                            {par.acorde}
-                        </span>
-                    );
-                })}
-            </div>
-            {/* Línea de letra */}
-            <div>
-                {pares.map((par, idx) => (
-                    <span key={idx}>{par.texto}</span>
-                ))}
+        <div style={{ overflowX: "auto", maxWidth: "100%" }}>
+            <div style={{ fontFamily: "monospace", whiteSpace: "pre" }}>
+                {/* Línea de acordes */}
+                <div className="text-success fw-semibold">
+                    {pares.map((par, idx) => {
+                        const espacioTexto = par.texto.length;
+                        const espacioAcorde = par.acorde.length;
+                        const padding = Math.max(espacioTexto, espacioAcorde + 1);
+                        return (
+                            <span key={idx} style={{ display: "inline-block", minWidth: `${padding}ch` }}>
+                                {par.acorde}
+                            </span>
+                        );
+                    })}
+                </div>
+                {/* Línea de letra */}
+                <div>
+                    {pares.map((par, idx) => (
+                        <span key={idx}>{par.texto}</span>
+                    ))}
+                </div>
             </div>
         </div>
     );
