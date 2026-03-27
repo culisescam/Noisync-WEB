@@ -28,7 +28,8 @@ function SongAvatar({ nombre, imagen }) {
             <img
                 src={imagen}
                 alt={nombre}
-                className="w-100 h-100 object-fit-cover rounded-top"
+                className="w-100 h-100 object-fit-cover rounded"
+
             />
         );
     }

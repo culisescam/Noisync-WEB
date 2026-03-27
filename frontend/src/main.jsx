@@ -4,7 +4,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import App from './App.jsx'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap-icons/font/bootstrap-icons.css";
-import './app.css';
+import './App.css';
 import { Toaster } from 'sonner';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
