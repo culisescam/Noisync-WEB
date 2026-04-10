@@ -5,11 +5,13 @@ import "../components/styles/changePassword.css";
 import useForm from "../../hooks/useForm";
 import { api } from "../../../api/api";
 import { toastError, toastSuccess } from "../../../api/alerts";
+import { useState } from "react";
 
 
 
 function ChangePassword() {
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const initialValues = {
         currentPassword: "",
@@ -45,7 +47,7 @@ function ChangePassword() {
         useForm(initialValues, validar);
 
     const onValidSubmit = async (vals) => {
-
+        setIsLoading(true);
         try {
 
             await api.post("/api/auth/change-password", {
@@ -70,6 +72,8 @@ function ChangePassword() {
                 toastError("No se pudo actualizar la contraseña");
             }
 
+        } finally {
+            setIsLoading(false);
         }
 
     };
@@ -122,8 +126,15 @@ function ChangePassword() {
                         forceValidate={submitIntentado}
                     />
 
-                    <button type="submit" className="btn btn-dark w-100">
-                        Actualizar
+                    <button
+                        type="submit"
+                        className="btn btn-dark w-100 custom-btn"
+                        disabled={isLoading}
+                    >
+                        {isLoading
+                            ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />Actualizando...</>
+                            : "Actualizar"
+                        }
                     </button>
                 </form>
 

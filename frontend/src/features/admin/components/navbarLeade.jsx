@@ -73,33 +73,38 @@ function NavbarLeader({ role }) {
                     </button>
 
                     <div
-                        className="collapse navbar-collapse justify-content-end"
+                        className="collapse navbar-collapse"
                         id="navbarLeaderContent"
                     >
-                        <div className="d-flex align-items-center gap-3">
+                        {/* ↓ Columna en móvil, fila en desktop */}
+                        <div className="d-flex flex-column flex-lg-row align-items-start align-items-lg-center gap-2 gap-lg-3 ms-auto mt-3 mt-lg-0 pb-2 pb-lg-0 w-100 w-lg-auto">
 
-                            <div className="dropdown">
+                            {/* Dropdown nombre */}
+                            <div className="dropdown w-100 w-lg-auto">
                                 <button
-                                    className="btn btn-light btn-sm dropdown-toggle"
+                                    className="btn btn-light btn-sm dropdown-toggle w-100 w-lg-auto text-start"
                                     type="button"
                                     data-bs-toggle="dropdown"
+                                    aria-expanded="false"
                                 >
                                     {user.name || "Usuario"}
                                 </button>
 
-                                <ul className="dropdown-menu dropdown-menu-end">
+                                <ul className="dropdown-menu dropdown-menu-lg-end">
                                     <li>
-                                        <span className="dropdown-item-text">
+                                        <span className="dropdown-item-text text-muted" style={{ fontSize: "0.85rem" }}>
                                             {user.email}
                                         </span>
                                     </li>
                                 </ul>
                             </div>
 
+                            {/* Avatar */}
                             <div className="dropdown">
                                 <button
                                     className="btn p-0 border-0 bg-transparent"
                                     data-bs-toggle="dropdown"
+                                    aria-expanded="false"
                                 >
                                     <div
                                         className="rounded-circle bg-light d-flex align-items-center justify-content-center"

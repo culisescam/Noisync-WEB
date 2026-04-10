@@ -5,13 +5,14 @@ import "../components/styles/changePassword.css";
 import useForm from "../../hooks/useForm";
 import { api } from "../../../api/api";
 import { toastError, toastInfo } from "../../../api/alerts.js";
+import { useState } from "react";
 
 
 
 
 function ForgotPassword() {
     const navigate = useNavigate();
-
+    const [isLoading, setIsLoading] = useState(false);
     const initialValues = {
         email: "",
     };
@@ -36,6 +37,7 @@ function ForgotPassword() {
         useForm(initialValues, validar);
 
     const onValidSubmit = async (vals) => {
+        setIsLoading(true);
         try {
 
             await api.post("/api/auth/forgot-password", {
@@ -52,6 +54,8 @@ function ForgotPassword() {
                 "No se pudo enviar la recuperación";
 
             toastError(msg);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -79,8 +83,15 @@ function ForgotPassword() {
                         forceValidate={submitIntentado}
                     />
 
-                    <button type="submit" className="btn btn-dark w-100">
-                        Enviar instrucciones de recuperación
+                    <button
+                        type="submit"
+                        className="btn btn-dark w-100 custom-btn"
+                        disabled={isLoading}             // ← 4. bloquear doble submit
+                    >
+                        {isLoading
+                            ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />Enviando instrucciones...</>
+                            : "Enviar instrucciones de recuperación"
+                        }
                     </button>
                 </form>
 

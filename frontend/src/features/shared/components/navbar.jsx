@@ -8,7 +8,6 @@ function Navbar() {
             <nav className="navbar navbar-expand-lg bg-white border-bottom shadow-sm">
                 <div className="container">
 
-                    {/* Logo (redirige a Home) */}
                     <Link to="/" className="navbar-brand d-flex align-items-center gap-2 fw-semibold">
                         <img
                             className='logoNav'
@@ -20,19 +19,21 @@ function Navbar() {
                         Noisync
                     </Link>
 
-                    {/* Botón hamburguesa */}
                     <button
                         className="navbar-toggler"
                         type="button"
                         data-bs-toggle="collapse"
                         data-bs-target="#navbarContent"
+                        aria-controls="navbarContent"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
                     >
                         <span className="navbar-toggler-icon"></span>
                     </button>
 
-                    {/* Botones derecha */}
-                    <div className="collapse navbar-collapse justify-content-end" id="navbarContent">
-                        <div className="d-flex gap-2">
+                    <div className="collapse navbar-collapse" id="navbarContent">
+                        {/* ↓ Cambio clave aquí */}
+                        <div className="d-flex flex-column flex-lg-row gap-2 ms-auto mt-3 mt-lg-0 pb-2 pb-lg-0">
 
                             <Link
                                 to="/login"

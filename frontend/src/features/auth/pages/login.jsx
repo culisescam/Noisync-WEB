@@ -14,6 +14,8 @@ function Login() {
     const [resendEmail, setResendEmail] = useState("");
     const [resendLoading, setResendLoading] = useState(false);
 
+    const [isLoading, setIsLoading] = useState(false);
+
     const identifierIsEmail = (v) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v?.trim());
 
     const handleResend = async () => {
@@ -67,6 +69,7 @@ function Login() {
         useForm(initialValues, validar);
 
     const onValidSubmit = async (vals) => {
+        setIsLoading(true);
         try {
             const data = await loginRequest(vals.identifier, vals.password);
             saveSession(data);
@@ -80,17 +83,17 @@ function Login() {
             }
 
         } catch (err) {
-
             const backendMsg =
                 err?.response?.data?.message ||
                 err?.response?.data?.error;
 
             if (backendMsg?.includes("verificar tu correo")) {
                 setShowVerifyAlert(true);
-                return;
+            } else {
+                toastError(backendMsg || "Credenciales incorrectas");
             }
-
-            toastError(backendMsg || "Credenciales incorrectas");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -177,8 +180,12 @@ function Login() {
                     <button
                         type="submit"
                         className="btn btn-dark w-100 custom-btn mt-3"
+                        disabled={isLoading}
                     >
-                        Entrar
+                        {isLoading
+                            ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />Entrando...</>
+                            : "Entrar"
+                        }
                     </button>
 
                 </form>

@@ -5,12 +5,14 @@ import "../components/styles/registro.css";
 import useForm from "../../hooks/useForm";
 import { registerRequest, saveSession } from "../../../api/authService.js";
 import { toastError } from "../../../api/alerts.js";
+import { useState } from "react";
 
 
 
 function Registro() {
 
     const navigate = useNavigate();
+    const [isLoading, setIsLoading] = useState(false);
 
     const initialValues = {
         nombre: "",
@@ -65,6 +67,7 @@ function Registro() {
     } = useForm(initialValues, validar);
 
     const onValidSubmit = async (vals) => {
+        setIsLoading(true);
         try {
 
             const body = {
@@ -84,6 +87,8 @@ function Registro() {
         } catch (err) {
             console.error(err);
             toastError(err?.response?.data?.message || "Error al registrar");
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -169,8 +174,15 @@ function Registro() {
                         Se creará la banda automáticamente y quedarás como Líder
                     </p>
 
-                    <button type="submit" className="btn btn-dark w-100 custom-btn">
-                        Crear Cuenta
+                    <button
+                        type="submit"
+                        className="btn btn-dark w-100 custom-btn"
+                        disabled={isLoading}             // ← 4. bloquear doble submit
+                    >
+                        {isLoading
+                            ? <><span className="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true" />Creando cuenta...</>
+                            : "Crear Cuenta"
+                        }
                     </button>
                 </form>
 
